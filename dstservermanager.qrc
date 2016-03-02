@@ -1,0 +1,6 @@
+<RCC>
+  <qresource prefix="dstServerManager">
+    <file>Resources/imgs/banner_img.jpg</file>
+    <file>Resources/imgs/banner_bg.png</file>
+  </qresource>
+</RCC>
