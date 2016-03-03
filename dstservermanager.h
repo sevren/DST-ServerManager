@@ -14,10 +14,13 @@ private slots:
 	void openDialog();
 	void settingsDialog();
 	void aboutDialog();
-		
+
 public:
 	dstServerManager(QWidget *parent = 0);
 	~dstServerManager();
+
+public slots:
+	void getData(QString);
 
 private:
 	Ui::dstServerManagerClass ui;

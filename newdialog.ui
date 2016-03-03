@@ -28,11 +28,14 @@
    <property name="toolTip">
     <string extracomment="Set the name of your server"/>
    </property>
+   <property name="toolTipDuration">
+    <number>1</number>
+   </property>
    <property name="text">
     <string>Server Configuration Name:</string>
    </property>
   </widget>
-  <widget class="QLineEdit" name="lineEdit">
+  <widget class="QLineEdit" name="NewServerConfigName">
    <property name="geometry">
     <rect>
      <x>160</x>
@@ -51,6 +54,9 @@
      <height>23</height>
     </rect>
    </property>
+   <property name="toolTipDuration">
+    <number>-1</number>
+   </property>
    <property name="standardButtons">
     <set>QDialogButtonBox::Cancel|QDialogButtonBox::Ok</set>
    </property>
@@ -58,5 +64,22 @@
  </widget>
  <layoutdefault spacing="6" margin="11"/>
  <resources/>
- <connections/>
+ <connections>
+  <connection>
+   <sender>buttonBox</sender>
+   <signal>rejected()</signal>
+   <receiver>NewDialog</receiver>
+   <slot>close()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>367</x>
+     <y>111</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>244</x>
+     <y>64</y>
+    </hint>
+   </hints>
+  </connection>
+ </connections>
 </ui>

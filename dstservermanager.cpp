@@ -1,4 +1,5 @@
 #include "dstservermanager.h"
+#include <QDebug>
 
 #include "newdialog.h"
 dstServerManager::dstServerManager(QWidget *parent)
@@ -7,7 +8,9 @@ dstServerManager::dstServerManager(QWidget *parent)
 	ui.setupUi(this);
 	
 	sct = new serverconfigurationtab();
+	setupConnections();
 	ui.gridLayout->addWidget(sct);
+
 	
 	
 }
@@ -24,8 +27,15 @@ void dstServerManager::setupConnections()
 void dstServerManager::createNewServerConfig()
 {
 	NewDialog *newd= new NewDialog();
+	connect(newd,SIGNAL(sendData(QString)),this,SLOT(getData(QString)));
 	newd->show();
 }
+
+void dstServerManager::getData(QString s)
+{
+	qDebug() << s;
+}
+
 
 void dstServerManager::openDialog()
 {

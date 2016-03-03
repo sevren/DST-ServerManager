@@ -124,4 +124,7 @@
   <ItemGroup>
     <ResourceCompile Include="DST-ServerManager.rc" />
   </ItemGroup>
+  <ItemGroup>
+    <Text Include="README.md" />
+  </ItemGroup>
 </Project>
