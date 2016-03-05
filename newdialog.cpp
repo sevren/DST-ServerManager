@@ -22,7 +22,7 @@ bool NewDialog::validate()
 	}
 	else
 	{
-	return false;
+		return false;
 	}
 }
 
