@@ -16,7 +16,7 @@
   <property name="windowTitle">
    <string>NewServer</string>
   </property>
-  <widget class="QLabel" name="label">
+  <widget class="QLabel" name="serverConfigLabel">
    <property name="geometry">
     <rect>
      <x>10</x>
@@ -44,6 +44,9 @@
      <height>20</height>
     </rect>
    </property>
+   <property name="placeholderText">
+    <string>Write a name for your server</string>
+   </property>
   </widget>
   <widget class="QDialogButtonBox" name="buttonBox">
    <property name="geometry">
@@ -53,6 +56,9 @@
      <width>156</width>
      <height>23</height>
     </rect>
+   </property>
+   <property name="focusPolicy">
+    <enum>Qt::StrongFocus</enum>
    </property>
    <property name="toolTipDuration">
     <number>-1</number>

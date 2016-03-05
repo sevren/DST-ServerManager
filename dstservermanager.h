@@ -24,8 +24,10 @@ public slots:
 
 private:
 	Ui::dstServerManagerClass ui;
+	QTabWidget *tabWidget;
 	serverconfigurationtab *sct;
 	void setupConnections();
+	void dstServerManager::setupMainLayout();
 
 	
 };

@@ -9,11 +9,22 @@ dstServerManager::dstServerManager(QWidget *parent)
 	
 	sct = new serverconfigurationtab();
 	setupConnections();
-	ui.gridLayout->addWidget(sct);
+	setupMainLayout();
+	//ui.gridLayout->addWidget(sct);
 
 	
 	
 }
+
+void dstServerManager::setupMainLayout()
+{
+	tabWidget = new QTabWidget();
+	tabWidget->setTabsClosable(true);
+	//tabWidget->addTab(new serverconfigurationtab(),"SERVER 1");
+	//tabWidget->addTab(new serverconfigurationtab(),"SERVER 2");
+	ui.gridLayout->addWidget(tabWidget);
+}
+
 
 void dstServerManager::setupConnections()
 {
@@ -31,9 +42,10 @@ void dstServerManager::createNewServerConfig()
 	newd->show();
 }
 
-void dstServerManager::getData(QString s)
+void dstServerManager::getData(QString serverTabName)
 {
-	qDebug() << s;
+	qDebug() << serverTabName;
+	tabWidget->addTab(new serverconfigurationtab(),serverTabName);
 }
 
 

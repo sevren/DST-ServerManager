@@ -137,9 +137,6 @@
     </CustomBuild>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="GeneratedFiles\ui_newdialog.h" />
-    <ClInclude Include="GeneratedFiles\ui_serverconfigurationtab.h" />
-    <ClInclude Include="GeneratedFiles\ui_testdlg.h" />
     <CustomBuild Include="newdialog.h">
       <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(QTDIR)\bin\moc.exe;%(FullPath)</AdditionalInputs>
       <Message Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Moc%27ing newdialog.h...</Message>

@@ -1,5 +1,6 @@
 #include "newdialog.h"
 #include <QDebug>
+#include <qtooltip.h>
 
 NewDialog::NewDialog(QWidget *parent)
 	: QWidget(parent)
@@ -42,6 +43,8 @@ void NewDialog::createNewServerConfig()
 	else
 	{
 		qDebug() << "Name can not be empty!";
+		QToolTip::showText(ui.NewServerConfigName->mapToGlobal(QPoint()), tr("Name Can not be empty!"));
+		
 	}
 	
 }
