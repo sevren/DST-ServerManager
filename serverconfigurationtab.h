@@ -13,7 +13,7 @@ private slots:
 		
 
 public:
-	serverconfigurationtab(QWidget *parent = 0);
+	serverconfigurationtab(QImage avatars[],std::vector<std::pair<QLabel*, QComboBox*>>&,QWidget *parent = 0);
 	~serverconfigurationtab();
 
 private:

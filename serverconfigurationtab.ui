@@ -18,7 +18,7 @@
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>801</width>
+     <width>791</width>
      <height>581</height>
     </rect>
    </property>
@@ -28,9 +28,9 @@
    <property name="tabsClosable">
     <bool>false</bool>
    </property>
-   <widget class="QWidget" name="tab">
+   <widget class="QWidget" name="serverSettings">
     <attribute name="title">
-     <string>ServerSettings1</string>
+     <string>ServerSettings</string>
     </attribute>
     <widget class="QPushButton" name="pushButton">
      <property name="geometry">
@@ -822,62 +822,118 @@
      </widget>
     </widget>
    </widget>
-   <widget class="QWidget" name="tab_5">
+   <widget class="QWidget" name="worldSettings">
     <attribute name="title">
      <string>GameOptions</string>
     </attribute>
-    <widget class="QGroupBox" name="groupBox">
-     <property name="geometry">
-      <rect>
-       <x>10</x>
-       <y>10</y>
-       <width>331</width>
-       <height>361</height>
-      </rect>
-     </property>
-     <property name="title">
-      <string>Animals</string>
-     </property>
-    </widget>
-    <widget class="QGroupBox" name="groupBox_2">
-     <property name="geometry">
-      <rect>
-       <x>350</x>
-       <y>10</y>
-       <width>411</width>
-       <height>361</height>
-      </rect>
-     </property>
-     <property name="title">
-      <string>Monsters</string>
-     </property>
-    </widget>
-    <widget class="QGroupBox" name="groupBox_3">
-     <property name="geometry">
-      <rect>
-       <x>350</x>
-       <y>380</y>
-       <width>421</width>
-       <height>141</height>
-      </rect>
-     </property>
-     <property name="title">
-      <string>GroupBox</string>
-     </property>
-    </widget>
-    <widget class="QGroupBox" name="groupBox_4">
-     <property name="geometry">
-      <rect>
-       <x>10</x>
-       <y>380</y>
-       <width>331</width>
-       <height>141</height>
-      </rect>
-     </property>
-     <property name="title">
-      <string>GroupBox</string>
-     </property>
-    </widget>
+    <layout class="QGridLayout" name="gridLayout_3">
+     <item row="0" column="0">
+      <widget class="QScrollArea" name="scrollArea">
+       <property name="frameShape">
+        <enum>QFrame::NoFrame</enum>
+       </property>
+       <property name="frameShadow">
+        <enum>QFrame::Plain</enum>
+       </property>
+       <property name="horizontalScrollBarPolicy">
+        <enum>Qt::ScrollBarAlwaysOff</enum>
+       </property>
+       <property name="widgetResizable">
+        <bool>false</bool>
+       </property>
+       <widget class="QWidget" name="scrollAreaWidgetContents_2">
+        <property name="geometry">
+         <rect>
+          <x>0</x>
+          <y>0</y>
+          <width>798</width>
+          <height>1600</height>
+         </rect>
+        </property>
+        <widget class="QGroupBox" name="world">
+         <property name="geometry">
+          <rect>
+           <x>0</x>
+           <y>0</y>
+           <width>741</width>
+           <height>521</height>
+          </rect>
+         </property>
+         <property name="title">
+          <string>World</string>
+         </property>
+         <widget class="QWidget" name="gridLayoutWidget">
+          <property name="geometry">
+           <rect>
+            <x>9</x>
+            <y>19</y>
+            <width>721</width>
+            <height>491</height>
+           </rect>
+          </property>
+          <layout class="QGridLayout" name="gridLayout">
+           <property name="spacing">
+            <number>3</number>
+           </property>
+          </layout>
+         </widget>
+        </widget>
+        <widget class="QGroupBox" name="resources">
+         <property name="geometry">
+          <rect>
+           <x>0</x>
+           <y>530</y>
+           <width>741</width>
+           <height>241</height>
+          </rect>
+         </property>
+         <property name="title">
+          <string>Resources</string>
+         </property>
+        </widget>
+        <widget class="QGroupBox" name="food">
+         <property name="geometry">
+          <rect>
+           <x>0</x>
+           <y>780</y>
+           <width>741</width>
+           <height>241</height>
+          </rect>
+         </property>
+         <property name="title">
+          <string>Food</string>
+         </property>
+        </widget>
+        <widget class="QGroupBox" name="animals">
+         <property name="geometry">
+          <rect>
+           <x>0</x>
+           <y>1080</y>
+           <width>741</width>
+           <height>241</height>
+          </rect>
+         </property>
+         <property name="title">
+          <string>Animals</string>
+         </property>
+        </widget>
+        <widget class="QGroupBox" name="monsters">
+         <property name="geometry">
+          <rect>
+           <x>0</x>
+           <y>1340</y>
+           <width>741</width>
+           <height>241</height>
+          </rect>
+         </property>
+         <property name="title">
+          <string>Monsters</string>
+         </property>
+        </widget>
+       </widget>
+      </widget>
+     </item>
+    </layout>
    </widget>
   </widget>
  </widget>
