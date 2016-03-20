@@ -3,6 +3,7 @@
 
 #include <QWidget>
 #include "ui_newdialog.h"
+#include "dstservermanager.h"
 
 class NewDialog : public QWidget
 {
@@ -13,15 +14,16 @@ private slots:
 
 
 public:
-	NewDialog(QWidget *parent = 0);
+	NewDialog(dstServerManager *dstWindow, QWidget *parent = 0);
 	~NewDialog();
 signals:
-	void sendData(QString);
+	void sendData(QString,QString);
 
 private:
 	Ui::NewDialog ui;
+	dstServerManager *dstWindow;
 	QString getTextFromInputBox();
-	bool validate();
+	pair<bool,QString> validate();
 };
 
 #endif // NEWDIALOG_H

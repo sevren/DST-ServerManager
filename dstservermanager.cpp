@@ -1,26 +1,22 @@
 #include <iostream>
 #include <string>
+#include <tuple>
 #include "dstservermanager.h"
-#include <QDebug>
 #include "newdialog.h"
+#include <QDebug>
 #include "pugixml.cpp"
-#include <boost/foreach.hpp>
-#include <boost/tokenizer.hpp>
 
 using namespace std;
-using namespace boost;
+
 
 dstServerManager::dstServerManager(QWidget *parent)
 	: QMainWindow(parent)
 {
 	ui.setupUi(this);
+	dstWindow=this;
 	
-	//sct = new serverconfigurationtab();
-
-
 	QImage image(".//Resources//imgs//worldsettings.png");
-	QImage copy ;
-	
+	QImage copy;
 	
 	int indx=0;
 	for(int i=0;i<image.width();i+=128)
@@ -38,6 +34,7 @@ dstServerManager::dstServerManager(QWidget *parent)
 
 	setupConnections();
 	setupMainLayout();
+	
 	pugi::xml_document doc;
 	if (!doc.load_file(".\\Resources\\worldSettings.xml"))
 	{
@@ -95,7 +92,22 @@ dstServerManager::dstServerManager(QWidget *parent)
 	}*/
 
 	qDebug() << "-------------Forest XML World Nodes -------------";
-	pugi::xpath_node_set worldNodes = doc.select_nodes("//Presets//Forest/World/*");
+	
+
+	ForestWorldArray=fillGameOptionsArray("//Presets//Forest/World/*");
+	ForestResourcesArray=fillGameOptionsArray("//Presets//Forest/Resources/*");
+	ForestFoodArray=fillGameOptionsArray("//Presets//Forest/Food/*");
+	ForestAnimalsArray=fillGameOptionsArray("//Presets//Forest/Animals/*");
+	ForestMonstersArray=fillGameOptionsArray("//Presets//Forest/Monsters/*");
+
+	CaveWorldArray=fillGameOptionsArray("//Presets//Cave/World/*");
+	CaveResourcesArray=fillGameOptionsArray("//Presets//Cave/Resources/*");
+	CaveFoodArray=fillGameOptionsArray("//Presets//Cave/Food/*");
+	CaveAnimalsArray=fillGameOptionsArray("//Presets//Cave/Animals/*");
+	CaveMonstersArray=fillGameOptionsArray("//Presets//Cave/Monsters/*");
+
+
+	/*pugi::xpath_node_set worldNodes = doc.select_nodes("//Presets//Forest/World/*");
 	int i=0;
 	for (pugi::xpath_node_set::const_iterator it = worldNodes.begin(); it != worldNodes.end(); ++it)
 	{
@@ -130,7 +142,42 @@ dstServerManager::dstServerManager(QWidget *parent)
 		i++;
 	}
 
-	//getData("sd");
+	worldNodes = doc.select_nodes("//Presets//Forest/Resources/*");
+	i=0;
+	for (pugi::xpath_node_set::const_iterator it = worldNodes.begin(); it != worldNodes.end(); ++it)
+	{
+		pugi::xpath_node worldN =*it;
+		qDebug() << worldN.node().name();
+		qDebug() << worldN.node().child("IconNum").child_value();
+		qDebug() << worldN.node().child("Default").child_value();
+		qDebug() << worldN.node().child("AcceptableValues").child_value();
+		
+		
+
+		QLabel* qlbl;
+		qlbl=new QLabel();
+		qlbl->setMinimumSize(QSize(50, 50));
+		qlbl->setMaximumSize(QSize(50, 50));
+		qlbl->setPixmap(QPixmap::fromImage(avatars[std::stoi(worldN.node().child("IconNum").child_value())]));
+		qlbl->setToolTip(QString::fromStdString(worldN.node().name()));
+		QComboBox* qcbox = new QComboBox();
+		QStringList list=(setComboBoxValues(worldN.node().child("AcceptableValues").child_value()));
+		qcbox->addItems(list);
+		
+		//Clean the extracted value
+		std::string input( worldN.node().child("Default").child_value()) ;
+		input.erase(remove_if(input.begin(), input.end(), isspace),input.end());
+
+		int index = qcbox->findData(QString::fromStdString(input),Qt::DisplayRole);
+		
+		if ( index != -1 ) { // -1 for not found
+		   qcbox->setCurrentIndex(index);
+		}
+		ForestResourcesArray.push_back(std::make_pair(qlbl,qcbox));
+		i++;
+	}*/
+
+//	getData("sd","Both");
 
 	
 }
@@ -139,32 +186,49 @@ void dstServerManager::setupMainLayout()
 {
 	tabWidget = new QTabWidget();
 	tabWidget->setTabsClosable(true);
-	//tabWidget->addTab(new serverconfigurationtab(),"SERVER 1");
-	//tabWidget->addTab(new serverconfigurationtab(),"SERVER 2");
+	connect(tabWidget, SIGNAL(tabCloseRequested(int)), this, SLOT(closeTab_(int)));
 	ui.gridLayout->addWidget(tabWidget);
 }
 
 
+void dstServerManager::closeTab_(int index)
+{
+	tabWidget->removeTab(index);
+}
+
 void dstServerManager::setupConnections()
 {
 	connect(ui.actionNew,SIGNAL(triggered()),this,SLOT(createNewServerConfig()));
-	
-
-
 }
 
 
 void dstServerManager::createNewServerConfig()
 {
-	NewDialog *newd= new NewDialog();
-	connect(newd,SIGNAL(sendData(QString)),this,SLOT(getData(QString)));
+	NewDialog *newd= new NewDialog(dstWindow);
+	connect(newd,SIGNAL(sendData(QString,QString)),this,SLOT(getData(QString,QString)));
 	newd->show();
 }
 
-void dstServerManager::getData(QString serverTabName)
+void dstServerManager::getData(QString serverTabName, QString preset)
 {
 	qDebug() << serverTabName;
-	tabWidget->addTab(new serverconfigurationtab(avatars,ForestWorldArray),serverTabName);
+	qDebug() << preset;
+	if ("Forest"==preset)
+	{
+		tabWidget->addTab(new serverconfigurationtab(preset,avatars,ForestWorldArray,ForestResourcesArray,ForestFoodArray,ForestAnimalsArray,ForestMonstersArray),serverTabName);
+	
+	}
+	else if ("Cave"==preset)
+	{
+		tabWidget->addTab(new serverconfigurationtab(preset,avatars,CaveWorldArray,CaveResourcesArray,CaveFoodArray,CaveAnimalsArray,CaveMonstersArray),serverTabName);
+	
+	}
+	else if ("Both"==preset)
+	{
+		tabWidget->addTab(new serverconfigurationtab("Forest",avatars,ForestWorldArray,ForestResourcesArray,ForestFoodArray,ForestAnimalsArray,ForestMonstersArray),serverTabName+"_forest");
+		tabWidget->addTab(new serverconfigurationtab("Cave",avatars,CaveWorldArray,CaveResourcesArray,CaveFoodArray,CaveAnimalsArray,CaveMonstersArray),serverTabName+"_cave");
+	
+	}
 }
 
 
@@ -182,20 +246,53 @@ void dstServerManager::aboutDialog()
 	//show the about dialog
 }
 
-QStringList dstServerManager::setComboBoxValues(std::string values)
+std::vector<std::tuple<int,string,string>> dstServerManager::fillGameOptionsArray(const char *xpathStr)
 {
-	QStringList stringList;
-	//tokenize AcceptableValues and return as list
-	char_separator<char> sep(",");
-    tokenizer< char_separator<char> > tokens(values, sep);
-    BOOST_FOREACH (const string& t, tokens) {
-		qDebug() << QString::fromStdString(t);
-		stringList.append(QString::fromStdString(t));
-    }
+	pugi::xml_document doc;
+	if (!doc.load_file(".\\Resources\\worldSettings.xml"))
+	{
+		qDebug() << "Errors parsing Document";
+	}
 
-	
-	return stringList;
+	std::vector<std::tuple<int,string,string>> filledArray;
+	pugi::xpath_node_set worldNodes = doc.select_nodes(xpathStr);
+
+	int i=0;
+	for (pugi::xpath_node_set::const_iterator it = worldNodes.begin(); it != worldNodes.end(); ++it)
+	{
+		pugi::xpath_node worldN =*it;
+		qDebug() << worldN.node().name();
+		qDebug() << worldN.node().child("IconNum").child_value();
+		qDebug() << worldN.node().child("Default").child_value();
+		qDebug() << worldN.node().child("AcceptableValues").child_value();
+		
+		//Clean the extracted value
+		std::string input( worldN.node().child("Default").child_value()) ;
+		input.erase(remove_if(input.begin(), input.end(), isspace),input.end());
+
+		filledArray.push_back(std::make_tuple(
+			stoi(worldN.node().child("IconNum").child_value()),
+			input,
+			worldN.node().child("AcceptableValues").child_value()));
+		i++;
+	}
+
+	return filledArray;
 }
+
+bool dstServerManager::serverExists(QString tabName)
+{
+	qDebug() << "looking for " << tabName << "in the current Tabs";
+	for(int i=0;i<tabWidget->count();i++) 
+	{ 
+		if(tabName==tabWidget->tabText(i) || (tabName+"_forest"==tabWidget->tabText(i) && tabName+"_cave"==tabWidget->tabText(i+1))) //Tabs are not re-arrangeable so this check will work..
+		{ 
+			return true;
+		} 
+	}
+	return false;
+}
+
 
 
 dstServerManager::~dstServerManager()
