@@ -106,77 +106,6 @@ dstServerManager::dstServerManager(QWidget *parent)
 	CaveAnimalsArray=fillGameOptionsArray("//Presets//Cave/Animals/*");
 	CaveMonstersArray=fillGameOptionsArray("//Presets//Cave/Monsters/*");
 
-
-	/*pugi::xpath_node_set worldNodes = doc.select_nodes("//Presets//Forest/World/*");
-	int i=0;
-	for (pugi::xpath_node_set::const_iterator it = worldNodes.begin(); it != worldNodes.end(); ++it)
-	{
-		pugi::xpath_node worldN =*it;
-		qDebug() << worldN.node().name();
-		qDebug() << worldN.node().child("IconNum").child_value();
-		qDebug() << worldN.node().child("Default").child_value();
-		qDebug() << worldN.node().child("AcceptableValues").child_value();
-		
-		
-
-		QLabel* qlbl;
-		qlbl=new QLabel();
-		qlbl->setMinimumSize(QSize(50, 50));
-		qlbl->setMaximumSize(QSize(50, 50));
-		qlbl->setPixmap(QPixmap::fromImage(avatars[std::stoi(worldN.node().child("IconNum").child_value())]));
-		qlbl->setToolTip(QString::fromStdString(worldN.node().name()));
-		QComboBox* qcbox = new QComboBox();
-		QStringList list=(setComboBoxValues(worldN.node().child("AcceptableValues").child_value()));
-		qcbox->addItems(list);
-		
-		//Clean the extracted value
-		std::string input( worldN.node().child("Default").child_value()) ;
-		input.erase(remove_if(input.begin(), input.end(), isspace),input.end());
-
-		int index = qcbox->findData(QString::fromStdString(input),Qt::DisplayRole);
-		
-		if ( index != -1 ) { // -1 for not found
-		   qcbox->setCurrentIndex(index);
-		}
-		ForestWorldArray.push_back(std::make_pair(qlbl,qcbox));
-		i++;
-	}
-
-	worldNodes = doc.select_nodes("//Presets//Forest/Resources/*");
-	i=0;
-	for (pugi::xpath_node_set::const_iterator it = worldNodes.begin(); it != worldNodes.end(); ++it)
-	{
-		pugi::xpath_node worldN =*it;
-		qDebug() << worldN.node().name();
-		qDebug() << worldN.node().child("IconNum").child_value();
-		qDebug() << worldN.node().child("Default").child_value();
-		qDebug() << worldN.node().child("AcceptableValues").child_value();
-		
-		
-
-		QLabel* qlbl;
-		qlbl=new QLabel();
-		qlbl->setMinimumSize(QSize(50, 50));
-		qlbl->setMaximumSize(QSize(50, 50));
-		qlbl->setPixmap(QPixmap::fromImage(avatars[std::stoi(worldN.node().child("IconNum").child_value())]));
-		qlbl->setToolTip(QString::fromStdString(worldN.node().name()));
-		QComboBox* qcbox = new QComboBox();
-		QStringList list=(setComboBoxValues(worldN.node().child("AcceptableValues").child_value()));
-		qcbox->addItems(list);
-		
-		//Clean the extracted value
-		std::string input( worldN.node().child("Default").child_value()) ;
-		input.erase(remove_if(input.begin(), input.end(), isspace),input.end());
-
-		int index = qcbox->findData(QString::fromStdString(input),Qt::DisplayRole);
-		
-		if ( index != -1 ) { // -1 for not found
-		   qcbox->setCurrentIndex(index);
-		}
-		ForestResourcesArray.push_back(std::make_pair(qlbl,qcbox));
-		i++;
-	}*/
-
 //	getData("sd","Both");
 
 	
@@ -236,6 +165,7 @@ void dstServerManager::openDialog()
 {
 	//show the open dialog
 }
+
 void dstServerManager::settingsDialog()
 {
 	//show the settings dialog

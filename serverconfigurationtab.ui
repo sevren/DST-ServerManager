@@ -23,7 +23,7 @@
     </rect>
    </property>
    <property name="currentIndex">
-    <number>1</number>
+    <number>0</number>
    </property>
    <property name="tabsClosable">
     <bool>false</bool>
@@ -32,7 +32,7 @@
     <attribute name="title">
      <string>ServerSettings</string>
     </attribute>
-    <widget class="QPushButton" name="pushButton">
+    <widget class="QPushButton" name="saveBtn">
      <property name="geometry">
       <rect>
        <x>600</x>
@@ -45,7 +45,7 @@
       <string>Save</string>
      </property>
     </widget>
-    <widget class="QPushButton" name="t1Run">
+    <widget class="QPushButton" name="runBtn">
      <property name="geometry">
       <rect>
        <x>690</x>
@@ -102,7 +102,7 @@
        <string>Shard Enabled</string>
       </property>
      </widget>
-     <widget class="QCheckBox" name="shardBool">
+     <widget class="QCheckBox" name="shard_enabled">
       <property name="geometry">
        <rect>
         <x>110</x>
@@ -128,7 +128,7 @@
        <string>Master IP Address</string>
       </property>
      </widget>
-     <widget class="QLineEdit" name="masterIpAddr">
+     <widget class="QLineEdit" name="master_ip">
       <property name="geometry">
        <rect>
         <x>110</x>
@@ -154,7 +154,7 @@
        <string>Master Port</string>
       </property>
      </widget>
-     <widget class="QSpinBox" name="masterPort">
+     <widget class="QSpinBox" name="master_port">
       <property name="geometry">
        <rect>
         <x>110</x>
@@ -183,7 +183,7 @@
        <string>Cluster Key</string>
       </property>
      </widget>
-     <widget class="QLineEdit" name="clusterKey">
+     <widget class="QLineEdit" name="cluster_key">
       <property name="geometry">
        <rect>
         <x>110</x>
@@ -219,7 +219,7 @@
        <string>Max Snapshots</string>
       </property>
      </widget>
-     <widget class="QSpinBox" name="maxSnapshots">
+     <widget class="QSpinBox" name="max_snapshots">
       <property name="geometry">
        <rect>
         <x>110</x>
@@ -245,7 +245,7 @@
        <string>Console Enabled</string>
       </property>
      </widget>
-     <widget class="QCheckBox" name="checkBox_5">
+     <widget class="QCheckBox" name="console_enabled">
       <property name="geometry">
        <rect>
         <x>110</x>
@@ -323,7 +323,7 @@
        <string>Steam Group Admins</string>
       </property>
      </widget>
-     <widget class="QLineEdit" name="steamGroupId">
+     <widget class="QLineEdit" name="steam_group_id">
       <property name="geometry">
        <rect>
         <x>100</x>
@@ -336,7 +336,7 @@
        <string>0</string>
       </property>
      </widget>
-     <widget class="QCheckBox" name="steamGroupOnlyBool">
+     <widget class="QCheckBox" name="steam_group_only">
       <property name="geometry">
        <rect>
         <x>130</x>
@@ -349,7 +349,7 @@
        <string/>
       </property>
      </widget>
-     <widget class="QCheckBox" name="steamGroupAdminsBool">
+     <widget class="QCheckBox" name="steam_group_admins">
       <property name="geometry">
        <rect>
         <x>130</x>
@@ -440,7 +440,7 @@
        <string>Vote Kick</string>
       </property>
      </widget>
-     <widget class="QSpinBox" name="spinBox_3">
+     <widget class="QSpinBox" name="max_players">
       <property name="geometry">
        <rect>
         <x>170</x>
@@ -453,7 +453,7 @@
        <number>16</number>
       </property>
      </widget>
-     <widget class="QCheckBox" name="checkBox_2">
+     <widget class="QCheckBox" name="pvp">
       <property name="geometry">
        <rect>
         <x>170</x>
@@ -466,7 +466,7 @@
        <string/>
       </property>
      </widget>
-     <widget class="QComboBox" name="comboBox_2">
+     <widget class="QComboBox" name="game_mode">
       <property name="geometry">
        <rect>
         <x>170</x>
@@ -491,7 +491,7 @@
        </property>
       </item>
      </widget>
-     <widget class="QCheckBox" name="checkBox_3">
+     <widget class="QCheckBox" name="pause_when_empty">
       <property name="geometry">
        <rect>
         <x>170</x>
@@ -504,7 +504,7 @@
        <string/>
       </property>
      </widget>
-     <widget class="QCheckBox" name="checkBox_4">
+     <widget class="QCheckBox" name="vote_kick_enabled">
       <property name="geometry">
        <rect>
         <x>170</x>
@@ -534,7 +534,7 @@
       <property name="geometry">
        <rect>
         <x>10</x>
-        <y>260</y>
+        <y>230</y>
         <width>101</width>
         <height>21</height>
        </rect>
@@ -543,11 +543,11 @@
        <string>Offline Server Only</string>
       </property>
      </widget>
-     <widget class="QCheckBox" name="offlineOnlyBool">
+     <widget class="QCheckBox" name="offline_cluster">
       <property name="geometry">
        <rect>
         <x>200</x>
-        <y>260</y>
+        <y>230</y>
         <width>16</width>
         <height>17</height>
        </rect>
@@ -556,11 +556,11 @@
        <string/>
       </property>
      </widget>
-     <widget class="QLabel" name="label">
+     <widget class="QLabel" name="tickRate_lbl">
       <property name="geometry">
        <rect>
         <x>10</x>
-        <y>320</y>
+        <y>290</y>
         <width>51</width>
         <height>16</height>
        </rect>
@@ -569,11 +569,11 @@
        <string>Tick Rate</string>
       </property>
      </widget>
-     <widget class="QSpinBox" name="tickRate">
+     <widget class="QSpinBox" name="tick_rate">
       <property name="geometry">
        <rect>
         <x>110</x>
-        <y>320</y>
+        <y>290</y>
         <width>42</width>
         <height>22</height>
        </rect>
@@ -582,11 +582,11 @@
        <number>15</number>
       </property>
      </widget>
-     <widget class="QLabel" name="label_2">
+     <widget class="QLabel" name="whitelistSlots_lbl">
       <property name="geometry">
        <rect>
         <x>10</x>
-        <y>350</y>
+        <y>320</y>
         <width>91</width>
         <height>21</height>
        </rect>
@@ -595,21 +595,21 @@
        <string>Whitelist Slots</string>
       </property>
      </widget>
-     <widget class="QSpinBox" name="spinBox">
+     <widget class="QSpinBox" name="whitelist_slots">
       <property name="geometry">
        <rect>
         <x>110</x>
-        <y>350</y>
+        <y>320</y>
         <width>42</width>
         <height>22</height>
        </rect>
       </property>
      </widget>
-     <widget class="QPushButton" name="pushButton_2">
+     <widget class="QPushButton" name="manageWhitelistPlayersBtn">
       <property name="geometry">
        <rect>
         <x>190</x>
-        <y>350</y>
+        <y>320</y>
         <width>151</width>
         <height>21</height>
        </rect>
@@ -618,11 +618,11 @@
        <string>Manage Whitelisted Players</string>
       </property>
      </widget>
-     <widget class="QLabel" name="label_4">
+     <widget class="QLabel" name="serverPassword_lbl">
       <property name="geometry">
        <rect>
         <x>10</x>
-        <y>140</y>
+        <y>100</y>
         <width>47</width>
         <height>13</height>
        </rect>
@@ -631,40 +631,11 @@
        <string>Password</string>
       </property>
      </widget>
-     <widget class="QLineEdit" name="lineEdit">
+     <widget class="QLineEdit" name="cluster_password">
       <property name="geometry">
        <rect>
         <x>110</x>
-        <y>140</y>
-        <width>221</width>
-        <height>31</height>
-       </rect>
-      </property>
-     </widget>
-     <widget class="QLabel" name="serverIPAddr_lbl">
-      <property name="geometry">
-       <rect>
-        <x>10</x>
-        <y>60</y>
-        <width>91</width>
-        <height>21</height>
-       </rect>
-      </property>
-      <property name="font">
-       <font>
-        <family>October Crow</family>
-        <pointsize>10</pointsize>
-       </font>
-      </property>
-      <property name="text">
-       <string>Server IP Address</string>
-      </property>
-     </widget>
-     <widget class="QLineEdit" name="serverIpAddr">
-      <property name="geometry">
-       <rect>
-        <x>110</x>
-        <y>60</y>
+        <y>90</y>
         <width>221</width>
         <height>31</height>
        </rect>
@@ -689,7 +660,7 @@
        <string>Server Name</string>
       </property>
      </widget>
-     <widget class="QLineEdit" name="serverName">
+     <widget class="QLineEdit" name="cluster_name">
       <property name="geometry">
        <rect>
         <x>110</x>
@@ -699,11 +670,11 @@
        </rect>
       </property>
      </widget>
-     <widget class="QLabel" name="label_5">
+     <widget class="QLabel" name="serverDescription_lbl">
       <property name="geometry">
        <rect>
         <x>10</x>
-        <y>180</y>
+        <y>150</y>
         <width>101</width>
         <height>21</height>
        </rect>
@@ -712,21 +683,21 @@
        <string>Server Description</string>
       </property>
      </widget>
-     <widget class="QLineEdit" name="lineEdit_2">
+     <widget class="QLineEdit" name="cluster_description">
       <property name="geometry">
        <rect>
         <x>110</x>
-        <y>180</y>
+        <y>140</y>
         <width>221</width>
         <height>31</height>
        </rect>
       </property>
      </widget>
-     <widget class="QLabel" name="label_6">
+     <widget class="QLabel" name="connectionFromSameLan_lbl">
       <property name="geometry">
        <rect>
         <x>10</x>
-        <y>290</y>
+        <y>260</y>
         <width>181</width>
         <height>21</height>
        </rect>
@@ -735,11 +706,11 @@
        <string>Accept Connections From Same LAN</string>
       </property>
      </widget>
-     <widget class="QCheckBox" name="checkBox">
+     <widget class="QCheckBox" name="lan_only_cluster">
       <property name="geometry">
        <rect>
         <x>200</x>
-        <y>290</y>
+        <y>260</y>
         <width>16</width>
         <height>21</height>
        </rect>
@@ -748,11 +719,11 @@
        <string/>
       </property>
      </widget>
-     <widget class="QLabel" name="label_7">
+     <widget class="QLabel" name="serverPlaystyle_lbl">
       <property name="geometry">
        <rect>
         <x>10</x>
-        <y>230</y>
+        <y>190</y>
         <width>91</width>
         <height>21</height>
        </rect>
@@ -761,11 +732,11 @@
        <string>Server Playstyle</string>
       </property>
      </widget>
-     <widget class="QComboBox" name="comboBox">
+     <widget class="QComboBox" name="cluster_intention">
       <property name="geometry">
        <rect>
         <x>110</x>
-        <y>230</y>
+        <y>190</y>
         <width>181</width>
         <height>21</height>
        </rect>
@@ -791,11 +762,11 @@
        </property>
       </item>
      </widget>
-     <widget class="QLabel" name="label_8">
+     <widget class="QLabel" name="serverPort_lbl">
       <property name="geometry">
        <rect>
         <x>10</x>
-        <y>100</y>
+        <y>50</y>
         <width>91</width>
         <height>31</height>
        </rect>
@@ -804,11 +775,11 @@
        <string>Server Port</string>
       </property>
      </widget>
-     <widget class="QSpinBox" name="spinBox_2">
+     <widget class="QSpinBox" name="server_port">
       <property name="geometry">
        <rect>
         <x>110</x>
-        <y>110</y>
+        <y>60</y>
         <width>101</width>
         <height>21</height>
        </rect>
@@ -818,6 +789,35 @@
       </property>
       <property name="value">
        <number>10888</number>
+      </property>
+     </widget>
+     <widget class="QCheckBox" name="autosaver_enabled">
+      <property name="geometry">
+       <rect>
+        <x>110</x>
+        <y>350</y>
+        <width>16</width>
+        <height>17</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string/>
+      </property>
+      <property name="checked">
+       <bool>true</bool>
+      </property>
+     </widget>
+     <widget class="QLabel" name="autoSaver_lbl">
+      <property name="geometry">
+       <rect>
+        <x>10</x>
+        <y>350</y>
+        <width>91</width>
+        <height>16</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>Auto-Saver</string>
       </property>
      </widget>
     </widget>
@@ -845,7 +845,7 @@
         <property name="geometry">
          <rect>
           <x>0</x>
-          <y>-1585</y>
+          <y>0</y>
           <width>798</width>
           <height>2122</height>
          </rect>

@@ -28,6 +28,9 @@ public:
 	serverconfigurationtab(QString preset, QImage*, xmlDataValues&,xmlDataValues&,xmlDataValues&,xmlDataValues&,xmlDataValues&,QWidget *parent = 0);
 	~serverconfigurationtab();
 
+private slots:
+		void saveSettings();
+
 private:
 	Ui::serverconfigurationtab ui;
 
@@ -52,7 +55,7 @@ private:
 	QStringList serverconfigurationtab::setComboBoxValues(string values);
 	gameOptions serverconfigurationtab::fillGameOptions(xmlDataValues&, QImage*);
 	void serverconfigurationtab::setupUserGameOptionsScreen(gameOptions& gOArray, int dataType);
-	
+	string  serverconfigurationtab::getServerConfigSettings(QGroupBox* groupBox);
 };
 
 #endif // SERVERCONFIGURATIONTAB_H
