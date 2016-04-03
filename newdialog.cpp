@@ -2,12 +2,15 @@
 #include <QDebug>
 #include <qtooltip.h>
 #include "dstservermanager.h"
+#include <qfiledialog.h>
 
 NewDialog::NewDialog(dstServerManager *dstWindow,QWidget *parent)
 	: QWidget(parent)
 {
 	ui.setupUi(this);
+	ui.serverFilePath->setReadOnly(true);
 	connect(ui.buttonBox,SIGNAL(accepted()),this,SLOT(createNewServerConfig()));
+	connect(ui.directoryChooserBtn,SIGNAL(clicked()),this,SLOT(openFileChooser()));
 	qDebug() << dstWindow->metaObject()->className();
 	this->dstWindow=dstWindow;
 }
@@ -70,7 +73,19 @@ void NewDialog::createNewServerConfig()
 	{
 		qDebug() << "Name can not be empty!";
 		QToolTip::showText(ui.NewServerConfigName->mapToGlobal(QPoint()), tr(msg.toStdString().c_str()));
-		
 	}
-	
+}
+
+void NewDialog::openFileChooser()
+{
+	QString dir =QFileDialog::getExistingDirectory(this, tr("Open Directory"),
+                                                "/home",
+                                                QFileDialog::ShowDirsOnly
+                                                | QFileDialog::DontResolveSymlinks);
+	qDebug() << dir;
+	if (!dir.isEmpty())
+	{
+		ui.serverFilePath->setText(dir);
+	}
+
 }

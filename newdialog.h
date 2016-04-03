@@ -11,11 +11,13 @@ class NewDialog : public QWidget
 
 private slots:
 	void createNewServerConfig();
+	void openFileChooser();
 
 
 public:
 	NewDialog(dstServerManager *dstWindow, QWidget *parent = 0);
 	~NewDialog();
+
 signals:
 	void sendData(QString,QString);
 

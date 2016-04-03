@@ -9,8 +9,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>489</width>
-    <height>130</height>
+    <width>510</width>
+    <height>198</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -51,8 +51,8 @@
   <widget class="QDialogButtonBox" name="buttonBox">
    <property name="geometry">
     <rect>
-     <x>290</x>
-     <y>100</y>
+     <x>310</x>
+     <y>160</y>
      <width>156</width>
      <height>23</height>
     </rect>
@@ -71,7 +71,7 @@
    <property name="geometry">
     <rect>
      <x>10</x>
-     <y>70</y>
+     <y>130</y>
      <width>201</width>
      <height>51</height>
     </rect>
@@ -121,6 +121,45 @@
      <string>Both</string>
     </property>
    </widget>
+  </widget>
+  <widget class="QLabel" name="label">
+   <property name="geometry">
+    <rect>
+     <x>10</x>
+     <y>80</y>
+     <width>131</width>
+     <height>16</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>Server File Path:</string>
+   </property>
+  </widget>
+  <widget class="QLineEdit" name="serverFilePath">
+   <property name="geometry">
+    <rect>
+     <x>160</x>
+     <y>80</y>
+     <width>301</width>
+     <height>20</height>
+    </rect>
+   </property>
+   <property name="placeholderText">
+    <string>Select a folder using the Select... button</string>
+   </property>
+  </widget>
+  <widget class="QPushButton" name="directoryChooserBtn">
+   <property name="geometry">
+    <rect>
+     <x>410</x>
+     <y>110</y>
+     <width>75</width>
+     <height>23</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>Select...</string>
+   </property>
   </widget>
  </widget>
  <layoutdefault spacing="6" margin="11"/>
