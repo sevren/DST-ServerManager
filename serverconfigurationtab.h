@@ -25,7 +25,7 @@ class serverconfigurationtab : public QWidget
 	
 
 public:
-	serverconfigurationtab(QString preset, QImage*, xmlDataValues&,xmlDataValues&,xmlDataValues&,xmlDataValues&,xmlDataValues&,QWidget *parent = 0);
+	serverconfigurationtab(QString preset,QString serverDirectoryPath, QImage*, xmlDataValues&,xmlDataValues&,xmlDataValues&,xmlDataValues&,xmlDataValues&,QWidget *parent = 0);
 	~serverconfigurationtab();
 
 private slots:
@@ -33,6 +33,7 @@ private slots:
 
 private:
 	Ui::serverconfigurationtab ui;
+	QString serverDirectoryPath;
 
 	//Need to keep track of all the presets
 

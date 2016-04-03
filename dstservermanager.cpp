@@ -145,18 +145,18 @@ void dstServerManager::getData(QString serverTabName, QString preset, QString se
 	qDebug() << serverDirectoryPath;
 	if ("Forest"==preset)
 	{
-		tabWidget->addTab(new serverconfigurationtab(preset,avatars,ForestWorldArray,ForestResourcesArray,ForestFoodArray,ForestAnimalsArray,ForestMonstersArray),serverTabName);
+		tabWidget->addTab(new serverconfigurationtab(preset,serverDirectoryPath,avatars,ForestWorldArray,ForestResourcesArray,ForestFoodArray,ForestAnimalsArray,ForestMonstersArray),serverTabName);
 	
 	}
 	else if ("Cave"==preset)
 	{
-		tabWidget->addTab(new serverconfigurationtab(preset,avatars,CaveWorldArray,CaveResourcesArray,CaveFoodArray,CaveAnimalsArray,CaveMonstersArray),serverTabName);
+		tabWidget->addTab(new serverconfigurationtab(preset,serverDirectoryPath,avatars,CaveWorldArray,CaveResourcesArray,CaveFoodArray,CaveAnimalsArray,CaveMonstersArray),serverTabName);
 	
 	}
 	else if ("Both"==preset)
 	{
-		tabWidget->addTab(new serverconfigurationtab("Forest",avatars,ForestWorldArray,ForestResourcesArray,ForestFoodArray,ForestAnimalsArray,ForestMonstersArray),serverTabName+"_forest");
-		tabWidget->addTab(new serverconfigurationtab("Cave",avatars,CaveWorldArray,CaveResourcesArray,CaveFoodArray,CaveAnimalsArray,CaveMonstersArray),serverTabName+"_cave");
+		tabWidget->addTab(new serverconfigurationtab("Forest",serverDirectoryPath,avatars,ForestWorldArray,ForestResourcesArray,ForestFoodArray,ForestAnimalsArray,ForestMonstersArray),serverTabName+"_forest");
+		tabWidget->addTab(new serverconfigurationtab("Cave",serverDirectoryPath,avatars,CaveWorldArray,CaveResourcesArray,CaveFoodArray,CaveAnimalsArray,CaveMonstersArray),serverTabName+"_cave");
 	
 	}
 }

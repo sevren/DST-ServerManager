@@ -10,23 +10,24 @@
 #include <iostream>
 #include <fstream>
 #include <sstream>
+#include <qdir.h>
 
 using namespace std;
 using namespace boost;
 
-serverconfigurationtab::serverconfigurationtab(QString preset,QImage*avatars, xmlDataValues& WorldArray,xmlDataValues& ResourcesArray,xmlDataValues& FoodArray,xmlDataValues& AnimalsArray,xmlDataValues& MonstersArray,QWidget *parent)
+serverconfigurationtab::serverconfigurationtab(QString preset,QString serverDirectoryPath,QImage*avatars, xmlDataValues& WorldArray,xmlDataValues& ResourcesArray,xmlDataValues& FoodArray,xmlDataValues& AnimalsArray,xmlDataValues& MonstersArray,QWidget *parent)
 	: QWidget(parent)
 {
 
 	ui.setupUi(this);
-
-	qDebug() << "Size of  World Array: " <<WorldArray.size();
+	this->serverDirectoryPath=serverDirectoryPath;
+	/*qDebug() << "Size of  World Array: " <<WorldArray.size();
 	qDebug() << "Size of  Resources Array: " <<ResourcesArray.size();
 	qDebug() << "Size of  Food Array: " <<FoodArray.size();
 	qDebug() << "Size of  Animals Array: " <<AnimalsArray.size();
 	qDebug() << "Size of  Monsters Array: " <<MonstersArray.size();
 	qDebug() << std::get<1>(WorldArray[0]).c_str();
-	qDebug() <<"Testing get";
+	qDebug() <<"Testing get";*/
 
 	//Fill the appropriate gameOption arrays depending on the preset choosen
 	if ("Forest"==preset)
@@ -203,8 +204,10 @@ string  serverconfigurationtab::getServerConfigSettings(QGroupBox* groupBox)
 void serverconfigurationtab::saveSettings()
 {
 	//save all settings to the cluster.ini, server.ini and worldoverridesettings.lua
+	qDebug() << serverDirectoryPath;
+	QString filePathName=serverDirectoryPath+QString(QDir::separator())+"cluster.ini";
 	ofstream myfile;
-	myfile.open ("cluster.ini");
+	myfile.open (filePathName.toStdString());
 	myfile << "[GAMEPLAY]\n";
 	myfile << getServerConfigSettings(ui.gameplaySettings) << "\n\n";
 	myfile << "[NETWORK]\n";
