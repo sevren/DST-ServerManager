@@ -24,7 +24,7 @@ public:
 	~dstServerManager();
 
 public slots:
-	void getData(QString,QString);
+	void getData(QString,QString,QString);
 
 private:
 	Ui::dstServerManagerClass ui;

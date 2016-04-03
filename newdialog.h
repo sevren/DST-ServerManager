@@ -19,12 +19,12 @@ public:
 	~NewDialog();
 
 signals:
-	void sendData(QString,QString);
+	void sendData(QString,QString,QString);
 
 private:
 	Ui::NewDialog ui;
 	dstServerManager *dstWindow;
-	QString getTextFromInputBox();
+	QString getTextFromInputBox(QLineEdit*);
 	pair<bool,QString> validate();
 };
 

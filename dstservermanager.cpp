@@ -134,14 +134,15 @@ void dstServerManager::setupConnections()
 void dstServerManager::createNewServerConfig()
 {
 	NewDialog *newd= new NewDialog(dstWindow);
-	connect(newd,SIGNAL(sendData(QString,QString)),this,SLOT(getData(QString,QString)));
+	connect(newd,SIGNAL(sendData(QString,QString,QString)),this,SLOT(getData(QString,QString,QString)));
 	newd->show();
 }
 
-void dstServerManager::getData(QString serverTabName, QString preset)
+void dstServerManager::getData(QString serverTabName, QString preset, QString serverDirectoryPath)
 {
 	qDebug() << serverTabName;
 	qDebug() << preset;
+	qDebug() << serverDirectoryPath;
 	if ("Forest"==preset)
 	{
 		tabWidget->addTab(new serverconfigurationtab(preset,avatars,ForestWorldArray,ForestResourcesArray,ForestFoodArray,ForestAnimalsArray,ForestMonstersArray),serverTabName);
