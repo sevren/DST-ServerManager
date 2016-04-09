@@ -14,7 +14,7 @@
 using namespace std;
 
 typedef vector<pair<QLabel*,QComboBox*>> gameOptions;
-typedef vector<tuple<int,string,string>> xmlDataValues;
+typedef vector<tuple<int,string,string,string>> xmlDataValues;
 
 
 
@@ -57,6 +57,10 @@ private:
 	gameOptions serverconfigurationtab::fillGameOptions(xmlDataValues&, QImage*);
 	void serverconfigurationtab::setupUserGameOptionsScreen(gameOptions& gOArray, int dataType);
 	string  serverconfigurationtab::getServerConfigSettings(QGroupBox* groupBox);
+	string  serverconfigurationtab::getGameOptionSettings(QGridLayout* gridLayout);
+	string serverconfigurationtab::convertComboData(string pickedItem);
+	string serverconfigurationtab::handleWorldData(string name,string pickedItem);
+	string serverconfigurationtab::fetchPreset();
 };
 
 #endif // SERVERCONFIGURATIONTAB_H

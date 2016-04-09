@@ -31,7 +31,6 @@ dstServerManager::dstServerManager(QWidget *parent)
 	}
 	
 
-
 	setupConnections();
 	setupMainLayout();
 	
@@ -177,7 +176,7 @@ void dstServerManager::aboutDialog()
 	//show the about dialog
 }
 
-std::vector<std::tuple<int,string,string>> dstServerManager::fillGameOptionsArray(const char *xpathStr)
+std::vector<std::tuple<int,string,string,string>> dstServerManager::fillGameOptionsArray(const char *xpathStr)
 {
 	pugi::xml_document doc;
 	if (!doc.load_file(".\\Resources\\worldSettings.xml"))
@@ -185,7 +184,7 @@ std::vector<std::tuple<int,string,string>> dstServerManager::fillGameOptionsArra
 		qDebug() << "Errors parsing Document";
 	}
 
-	std::vector<std::tuple<int,string,string>> filledArray;
+	std::vector<std::tuple<int,string,string,string>> filledArray;
 	pugi::xpath_node_set worldNodes = doc.select_nodes(xpathStr);
 
 	int i=0;
@@ -204,7 +203,8 @@ std::vector<std::tuple<int,string,string>> dstServerManager::fillGameOptionsArra
 		filledArray.push_back(std::make_tuple(
 			stoi(worldN.node().child("IconNum").child_value()),
 			input,
-			worldN.node().child("AcceptableValues").child_value()));
+			worldN.node().child("AcceptableValues").child_value(),
+			worldN.node().name()));
 		i++;
 	}
 

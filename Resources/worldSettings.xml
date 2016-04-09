@@ -3,559 +3,559 @@
 <Presets> 
   <Forest> 
     <World> 
-      <Biomes> 
+      <task_set> 
         <IconNum>65</IconNum>  
         <!-- Index to the array of QImages -->  
         <Default>Together</Default>  
         <!-- Default Value shown to user -->  
         <AcceptableValues>Together,Classic</AcceptableValues>  
         <!-- List of acceptable values to populate the slider with; Must be ',' deliminated --> 
-      </Biomes>  
-      <Start> 
+      </task_set>  
+      <start_location> 
         <IconNum>77</IconNum>  
         <Default>Default</Default>  
         <AcceptableValues>Default,Plus,Dark</AcceptableValues> 
-      </Start>  
-      <Size> 
+      </start_location>  
+      <world_size> 
         <IconNum>71</IconNum>  
         <Default>Large</Default>  
         <AcceptableValues>Small,Medium,Large,Huge</AcceptableValues> 
-      </Size>  
-      <Branches> 
+      </world_size>  
+      <branching> 
         <IconNum>53</IconNum>  
         <Default>Default</Default>  
         <AcceptableValues>Never,Least,Default,Most</AcceptableValues> 
-      </Branches>  
-      <Loops> 
+      </branching>  
+      <loop> 
         <IconNum>59</IconNum>  
         <Default>Default</Default>  
-        <AcceptableValues>never,Default,Always</AcceptableValues> 
-      </Loops>  
-      <Autumn> 
+        <AcceptableValues>Never,Default,Always</AcceptableValues> 
+      </loop>  
+      <autumn> 
         <IconNum>12</IconNum>  
         <Default>Default</Default>  
         <AcceptableValues>None,Very short,Short,Default,Long,Very long,Random</AcceptableValues> 
-      </Autumn>  
-      <Winter> 
+      </autumn>  
+      <winter> 
         <IconNum>47</IconNum>  
         <Default>Default</Default>  
         <AcceptableValues>None,Very short,Short,Default,Long,Very long,Random</AcceptableValues> 
-      </Winter>  
-      <Spring> 
+      </winter>  
+      <spring> 
         <IconNum>88</IconNum>  
         <Default>Default</Default>  
         <AcceptableValues>None,Very short,Short,Default,Long,Very long,Random</AcceptableValues> 
-      </Spring>  
-      <Summer> 
+      </spring>  
+      <summer> 
         <IconNum>94</IconNum>  
         <Default>Default</Default>  
         <AcceptableValues>None,Very short,Short,Default,Long,Very long,Random</AcceptableValues> 
-      </Summer>  
-      <StartingSeason> 
+      </summer>  
+      <season_start> 
         <IconNum>52</IconNum>  
         <Default>Autumn</Default>  
         <AcceptableValues>Autumn,Winter,Spring,Summer,Autumn/Spring,Winter/Summer,Random</AcceptableValues> 
-      </StartingSeason>  
-      <DayType> 
+      </season_start>  
+      <day> 
         <IconNum>43</IconNum>  
         <Default>Default</Default>  
         <AcceptableValues>Default,Long Day,Long Dusk,Long Night,No Day,No Dusk,No Night,Only Day,Only Dusk,Only Night</AcceptableValues> 
-      </DayType>  
-      <Rain> 
+      </day>  
+      <rain> 
         <IconNum>87</IconNum>  
         <Default>Default</Default>  
         <AcceptableValues>None,Less,Default,More,Lots</AcceptableValues> 
-      </Rain>  
-      <Lightning> 
+      </rain>  
+      <lightning> 
         <IconNum>74</IconNum>  
         <Default>Default</Default>  
         <AcceptableValues>None,Less,Default,More,Lots</AcceptableValues> 
-      </Lightning>  
-      <FrogRain> 
+      </lightning>  
+      <frograin> 
         <IconNum>14</IconNum>  
         <Default>Default</Default>  
         <AcceptableValues>None,Less,Default,More,Lots</AcceptableValues> 
-      </FrogRain>  
-      <Wildfires> 
+      </frograin>  
+      <wildfires> 
         <IconNum>76</IconNum>  
         <Default>Default</Default>  
         <AcceptableValues>None,Less,Default,More,Lots</AcceptableValues> 
-      </Wildfires>  
-      <WorldRegrowth> 
+      </wildfires>  
+      <regrowth> 
         <IconNum>4</IconNum>  
         <Default>Default</Default>  
         <AcceptableValues>Very Slow,Slow,Default,Fast,Very Fast</AcceptableValues> 
-      </WorldRegrowth>  
-      <TouchStones> 
+      </regrowth>  
+      <touchstone> 
         <IconNum>10</IconNum>  
         <Default>Default</Default>  
         <AcceptableValues>None,Less,Default,More,Lots</AcceptableValues> 
-      </TouchStones>  
-      <FailedSurvivors> 
+      </touchstone>  
+      <boons> 
         <IconNum>58</IconNum>  
         <Default>Default</Default>  
         <AcceptableValues>None,Less,Default,More,Lots</AcceptableValues> 
-      </FailedSurvivors> 
+      </boons> 
     </World>  
     <Resources> 
-      <Flowers> 
+      <flowers> 
         <IconNum>91</IconNum>  
         <Default>Default</Default>  
         <AcceptableValues>None,Less,Default,More,Lots</AcceptableValues> 
-      </Flowers>  
-      <Grass> 
+      </flowers>  
+      <grass> 
         <IconNum>26</IconNum>  
         <Default>Default</Default>  
         <AcceptableValues>None,Less,Default,More,Lots</AcceptableValues> 
-      </Grass>  
-      <Saplings> 
+      </grass>  
+      <sapling> 
         <IconNum>34</IconNum>  
         <Default>Default</Default>  
         <AcceptableValues>None,Less,Default,More,Lots</AcceptableValues> 
-      </Saplings>  
-      <SpikyBushes> 
+      </sapling>  
+      <marshbush> 
         <IconNum>9</IconNum>  
         <Default>Default</Default>  
         <AcceptableValues>None,Less,Default,More,Lots</AcceptableValues> 
-      </SpikyBushes>  
-      <Tumbleweeds> 
+      </marshbush>  
+      <tumbleweed>
         <IconNum>29</IconNum>  
         <Default>Default</Default>  
         <AcceptableValues>None,Less,Default,More,Lots</AcceptableValues> 
-      </Tumbleweeds>  
-      <Reeds> 
+      </tumbleweed>  
+      <reeds> 
         <IconNum>93</IconNum>  
         <Default>Default</Default>  
         <AcceptableValues>None,Less,Default,More,Lots</AcceptableValues> 
-      </Reeds>  
-      <Trees> 
+      </reeds>  
+      <trees> 
         <IconNum>23</IconNum>  
         <Default>Default</Default>  
         <AcceptableValues>None,Less,Default,More,Lots</AcceptableValues> 
-      </Trees>  
-      <Flint> 
+      </trees>  
+      <flint> 
         <IconNum>85</IconNum>  
         <Default>Default</Default>  
         <AcceptableValues>None,Less,Default,More,Lots</AcceptableValues> 
-      </Flint>  
-      <Boulders> 
+      </flint>  
+      <rock> 
         <IconNum>16</IconNum>  
         <Default>Default</Default>  
         <AcceptableValues>None,Less,Default,More,Lots</AcceptableValues> 
-      </Boulders>  
-      <MiniGlaciers> 
+      </rock>  
+      <rock_ice> 
         <IconNum>44</IconNum>  
         <Default>Default</Default>  
         <AcceptableValues>None,Less,Default,More,Lots</AcceptableValues> 
-      </MiniGlaciers>  
-      <MeteorFields> 
+      </rock_ice>  
+      <meteorspawner> 
         <IconNum>84</IconNum>  
         <Default>Default</Default>  
         <AcceptableValues>None,Less,Default,More,Lots</AcceptableValues> 
-      </MeteorFields>  
-      <MeteorFrequency> 
+      </meteorspawner>  
+      <meteorshowers> 
         <IconNum>21</IconNum>  
         <Default>Default</Default>  
         <AcceptableValues>None,Less,Default,More,Lots</AcceptableValues> 
-      </MeteorFrequency> 
+      </meteorshowers> 
     </Resources>  
     <Food> 
-      <BerryBushes> 
+      <berrybush> 
         <IconNum>60</IconNum>  
         <Default>Default</Default>  
         <AcceptableValues>None,Less,Default,More,Lots</AcceptableValues> 
-      </BerryBushes>  
-      <Carrots> 
+      </berrybush>  
+      <carrot> 
         <IconNum>13</IconNum>  
         <Default>Default</Default>  
         <AcceptableValues>None,Less,Default,More,Lots</AcceptableValues> 
-      </Carrots>  
-      <Mushrooms> 
+      </carrot>  
+      <mushroom> 
         <IconNum>45</IconNum>  
         <Default>Default</Default>  
         <AcceptableValues>None,Less,Default,More,Lots</AcceptableValues> 
-      </Mushrooms>  
-      <Cactuses> 
+      </mushroom>  
+      <cactus> 
         <IconNum>7</IconNum>  
         <Default>Default</Default>  
         <AcceptableValues>None,Less,Default,More,Lots</AcceptableValues> 
-      </Cactuses> 
+      </cactus> 
     </Food>  
     <Animals> 
-      <Rabbits> 
+      <rabbits> 
         <IconNum>81</IconNum>  
         <Default>Default</Default>  
         <AcceptableValues>None,Less,Default,More,Lots</AcceptableValues> 
-      </Rabbits>  
-      <Moles> 
+      </rabbits>  
+      <moles> 
         <IconNum>27</IconNum>  
         <Default>Default</Default>  
         <AcceptableValues>None,Less,Default,More,Lots</AcceptableValues> 
-      </Moles>  
-      <Butterflies> 
+      </moles>  
+      <butterfly> 
         <IconNum>90</IconNum>  
         <Default>Default</Default>  
         <AcceptableValues>None,Less,Default,More,Lots</AcceptableValues> 
-      </Butterflies>  
-      <Birds> 
+      </butterfly>  
+      <birds> 
         <IconNum>72</IconNum>  
         <Default>Default</Default>  
         <AcceptableValues>None,Less,Default,More,Lots</AcceptableValues> 
-      </Birds>  
-      <Buzzards> 
+      </birds>  
+      <buzzard> 
         <IconNum>1</IconNum>  
         <Default>Default</Default>  
         <AcceptableValues>None,Less,Default,More,Lots</AcceptableValues> 
-      </Buzzards>  
-      <Catcoons> 
+      </buzzard>  
+      <catcoon> 
         <IconNum>19</IconNum>  
         <Default>Default</Default>  
         <AcceptableValues>None,Less,Default,More,Lots</AcceptableValues> 
-      </Catcoons>  
-      <Gobblers> 
+      </catcoon>  
+      <perd> 
         <IconNum>63</IconNum>  
         <Default>Default</Default>  
         <AcceptableValues>None,Less,Default,More,Lots</AcceptableValues> 
-      </Gobblers>  
-      <Pigs> 
+      </perd>  
+      <pigs> 
         <IconNum>69</IconNum>  
         <Default>Default</Default>  
         <AcceptableValues>None,Less,Default,More,Lots</AcceptableValues> 
-      </Pigs>  
-      <VoltGoats> 
+      </pigs>  
+      <lightninggoat> 
         <IconNum>80</IconNum>  
         <Default>Default</Default>  
         <AcceptableValues>None,Less,Default,More,Lots</AcceptableValues> 
-      </VoltGoats>  
-      <Beefalos> 
+      </lightninggoat>  
+      <beefalo> 
         <IconNum>36</IconNum>  
         <Default>Default</Default>  
         <AcceptableValues>None,Less,Default,More,Lots</AcceptableValues> 
-      </Beefalos>  
-      <BeefaloMating> 
+      </beefalo>  
+      <beefaloheat> 
         <IconNum>42</IconNum>  
         <Default>Default</Default>  
         <AcceptableValues>None,Less,Default,More,Lots</AcceptableValues> 
-      </BeefaloMating>  
-      <Hunts> 
+      </beefaloheat>  
+      <hunt> 
         <IconNum>17</IconNum>  
         <Default>Default</Default>  
         <AcceptableValues>None,Less,Default,More,Lots</AcceptableValues> 
-      </Hunts>  
-      <HuntSurprises> 
+      </hunt>  
+      <alternatehunt> 
         <IconNum>0</IconNum>  
         <Default>Default</Default>  
         <AcceptableValues>None,Less,Default,More,Lots</AcceptableValues> 
-      </HuntSurprises>  
-      <Penguins> 
+      </alternatehunt>  
+      <penguins> 
         <IconNum>57</IconNum>  
         <Default>Default</Default>  
         <AcceptableValues>None,Less,Default,More,Lots</AcceptableValues> 
-      </Penguins>  
-      <Ponds> 
+      </penguins>  
+      <ponds> 
         <IconNum>75</IconNum>  
         <Default>Default</Default>  
         <AcceptableValues>None,Less,Default,More,Lots</AcceptableValues> 
-      </Ponds>  
-      <Bees> 
+      </ponds>  
+      <bees> 
         <IconNum>48</IconNum>  
         <Default>Default</Default>  
         <AcceptableValues>None,Less,Default,More,Lots</AcceptableValues> 
-      </Bees>  
-      <KillerBees> 
+      </bees>  
+      <angrybees> 
         <IconNum>41</IconNum>  
         <Default>Default</Default>  
         <AcceptableValues>None,Less,Default,More,Lots</AcceptableValues> 
-      </KillerBees>  
-      <Tallbirds> 
+      </angrybees>  
+      <tallbirds> 
         <IconNum>5</IconNum>  
         <Default>Default</Default>  
         <AcceptableValues>None,Less,Default,More,Lots</AcceptableValues> 
-      </Tallbirds> 
+      </tallbirds> 
     </Animals>  
     <Monsters> 
-      <Spiders> 
+      <spiders> 
         <IconNum>82</IconNum>  
         <Default>Default</Default>  
         <AcceptableValues>None,Less,Default,More,Lots</AcceptableValues> 
-      </Spiders>  
-      <HoundAttacks> 
+      </spiders>  
+      <hounds> 
         <IconNum>38</IconNum>  
         <Default>Default</Default>  
         <AcceptableValues>None,Less,Default,More,Lots</AcceptableValues> 
-      </HoundAttacks>  
-      <HoundMounds> 
+      </hounds>  
+      <houndmound> 
         <IconNum>32</IconNum>  
         <Default>Default</Default>  
         <AcceptableValues>None,Less,Default,More,Lots</AcceptableValues> 
-      </HoundMounds>  
-      <Merms> 
+      </houndmound>  
+      <merm> 
         <IconNum>15</IconNum>  
-        <Default>Default</Default>  
+        <Default>Default</Default>
         <AcceptableValues>None,Less,Default,More,Lots</AcceptableValues> 
-      </Merms>  
-      <Tentacles> 
+      </merm>  
+      <tentacles> 
         <IconNum>11</IconNum>  
         <Default>Default</Default>  
         <AcceptableValues>None,Less,Default,More,Lots</AcceptableValues> 
-      </Tentacles>  
-      <Clockworks> 
+      </tentacles>  
+      <chess> 
         <IconNum>37</IconNum>  
         <Default>Default</Default>  
         <AcceptableValues>None,Less,Default,More,Lots</AcceptableValues> 
-      </Clockworks>  
-      <Lureplants> 
+      </chess>  
+      <lureplants> 
         <IconNum>86</IconNum>  
         <Default>Default</Default>  
         <AcceptableValues>None,Less,Default,More,Lots</AcceptableValues> 
-      </Lureplants>  
-      <MacTuskCamps> 
+      </lureplants>  
+      <walrus> 
         <IconNum>92</IconNum>  
         <Default>Default</Default>  
         <AcceptableValues>None,Less,Default,More,Lots</AcceptableValues> 
-      </MacTuskCamps>  
-      <Treeguards> 
+      </walrus>  
+      <liefs> 
         <IconNum>68</IconNum>  
         <Default>Default</Default>  
         <AcceptableValues>None,Less,Default,More,Lots</AcceptableValues> 
-      </Treeguards>  
-      <PoisonBirchnut> 
+      </liefs>  
+      <deciduousmonster> 
         <IconNum>49</IconNum>  
         <Default>Default</Default>  
         <AcceptableValues>None,Less,Default,More,Lots</AcceptableValues> 
-      </PoisonBirchnut>  
-      <Krampusse> 
+      </deciduousmonster>  
+      <krampus> 
         <IconNum>56</IconNum>  
         <Default>Default</Default>  
         <AcceptableValues>None,Less,Default,More,Lots</AcceptableValues> 
-      </Krampusse>  
-      <Bearger> 
+      </krampus>  
+      <bearger> 
         <IconNum>30</IconNum>  
         <Default>Default</Default>  
         <AcceptableValues>None,Less,Default,More,Lots</AcceptableValues> 
-      </Bearger>  
-      <Deerclops> 
+      </bearger>  
+      <deerclops> 
         <IconNum>55</IconNum>  
         <Default>Default</Default>  
         <AcceptableValues>None,Less,Default,More,Lots</AcceptableValues> 
-      </Deerclops>  
-      <NoName> 
+      </deerclops>  
+      <goosemoose> 
         <IconNum>20</IconNum>  
         <Default>Default</Default>  
         <AcceptableValues>None,Less,Default,More,Lots</AcceptableValues> 
-      </NoName>  
-      <DragonFly> 
+      </goosemoose>  
+      <dragonfly> 
         <IconNum>61</IconNum>  
         <Default>Default</Default>  
         <AcceptableValues>None,Less,Default,More,Lots</AcceptableValues> 
-      </DragonFly> 
+      </dragonfly> 
     </Monsters> 
   </Forest>  
   <Cave> 
     <World> 
-      <Biomes> 
+      <task_set> 
         <IconNum>65</IconNum>  
         <Default>Underground</Default>  
         <AcceptableValues>Underground</AcceptableValues> 
-      </Biomes>  
-      <Start> 
+      </task_set>  
+      <start_location> 
         <IconNum>77</IconNum>  
         <Default>Caves</Default>  
         <AcceptableValues>Caves</AcceptableValues> 
-      </Start>  
-      <Size> 
+      </start_location>  
+      <world_size> 
         <IconNum>71</IconNum>  
         <Default>Large</Default>  
         <AcceptableValues>Small,Medium,Large,Huge</AcceptableValues> 
-      </Size>  
-      <Branches> 
+      </world_size>  
+      <branching> 
         <IconNum>53</IconNum>  
         <Default>Default</Default>  
         <AcceptableValues>Never,Least,Default,Most</AcceptableValues> 
-      </Branches>  
-      <Loops> 
+      </branching>  
+      <loop> 
         <IconNum>59</IconNum>  
         <Default>Default</Default>  
         <AcceptableValues>Never,Default,Always</AcceptableValues> 
-      </Loops>  
-      <Rain> 
+      </loop>  
+      <rain> 
         <IconNum>87</IconNum>  
         <Default>Default</Default>  
         <AcceptableValues>None,Less,Default,More,Lots</AcceptableValues> 
-      </Rain>  
-      <Earthquakes> 
+      </rain>  
+      <earthquakes> 
         <IconNum>67</IconNum>  
         <Default>Default</Default>  
         <AcceptableValues>None,Less,Default,More,Lots</AcceptableValues> 
-      </Earthquakes>  
-      <WorldRegrowth> 
+      </earthquakes>  
+      <regrowth> 
         <IconNum>4</IconNum>  
         <Default>Default</Default>  
         <AcceptableValues>Very Slow,Slow,Default,Fast,Very Fast</AcceptableValues> 
-      </WorldRegrowth>  
-      <TouchStones> 
+      </regrowth>  
+      <touchstone> 
         <IconNum>10</IconNum>  
         <Default>Default</Default>  
         <AcceptableValues>None,Less,Default,More,Lots</AcceptableValues> 
-      </TouchStones>  
-      <FailedSurvivors> 
+      </touchstone>  
+      <boons> 
         <IconNum>58</IconNum>  
         <Default>Default</Default>  
         <AcceptableValues>None,Less,Default,More,Lots</AcceptableValues> 
-      </FailedSurvivors>  
-      <SinkholeLights> 
+      </boons>  
+      <cavelight> 
         <IconNum>25</IconNum>  
         <Default>Default</Default>  
         <AcceptableValues>Very Slow,Slow,Default,Fast,Very Fast</AcceptableValues> 
-      </SinkholeLights> 
+      </cavelight> 
     </World>  
     <Resources> 
-      <Grass> 
+      <grass> 
         <IconNum>26</IconNum>  
         <Default>Default</Default>  
         <AcceptableValues>None,Less,Default,More,Lots</AcceptableValues> 
-      </Grass>  
-      <Saplings> 
+      </grass>  
+      <sapling> 
         <IconNum>34</IconNum>  
         <Default>Default</Default>  
         <AcceptableValues>None,Less,Default,More,Lots</AcceptableValues> 
-      </Saplings>  
-      <SpikyBushes> 
+      </sapling>  
+      <marshbush> 
         <IconNum>9</IconNum>  
         <Default>Default</Default>  
         <AcceptableValues>None,Less,Default,More,Lots</AcceptableValues> 
-      </SpikyBushes>  
-      <Reeds> 
+      </marshbush>  
+      <reeds> 
         <IconNum>93</IconNum>  
         <Default>Default</Default>  
         <AcceptableValues>None,Less,Default,More,Lots</AcceptableValues> 
-      </Reeds>  
-      <Trees> 
+      </reeds>  
+      <trees> 
         <IconNum>23</IconNum>  
         <Default>Default</Default>  
         <AcceptableValues>None,Less,Default,More,Lots</AcceptableValues> 
-      </Trees>  
-      <Flint> 
+      </trees>  
+      <flint> 
         <IconNum>85</IconNum>  
         <Default>Default</Default>  
         <AcceptableValues>None,Less,Default,More,Lots</AcceptableValues> 
-      </Flint>  
-      <Boulders> 
+      </flint>  
+      <rock> 
         <IconNum>16</IconNum>  
         <Default>Default</Default>  
         <AcceptableValues>None,Less,Default,More,Lots</AcceptableValues> 
-      </Boulders>  
-      <MushroomTrees> 
+      </rock>  
+      <mushtree> 
         <IconNum>51</IconNum>  
         <Default>Default</Default>  
         <AcceptableValues>None,Less,Default,More,Lots</AcceptableValues> 
-      </MushroomTrees>  
-      <CaveFerns> 
+      </mushtree>  
+      <fern> 
         <IconNum>73</IconNum>  
         <Default>Default</Default>  
         <AcceptableValues>None,Less,Default,More,Lots</AcceptableValues> 
-      </CaveFerns>  
-      <LightFlowers> 
+      </fern>  
+      <flower_cave> 
         <IconNum>2</IconNum>  
         <Default>Default</Default>  
         <AcceptableValues>None,Less,Default,More,Lots</AcceptableValues> 
-      </LightFlowers>  
-      <GlowBerries> 
+      </flower_cave>  
+      <wormlight> 
         <IconNum>83</IconNum>  
         <Default>Default</Default>  
         <AcceptableValues>None,Less,Default,More,Lots</AcceptableValues> 
-      </GlowBerries> 
+      </wormlight> 
     </Resources>  
     <Food> 
-      <BerryBushes> 
+      <berrybush> 
         <IconNum>60</IconNum>  
         <Default>Default</Default>  
         <AcceptableValues>None,Less,Default,More,Lots</AcceptableValues> 
-      </BerryBushes>  
-      <Mushrooms> 
+      </berrybush>  
+      <mushroom> 
         <IconNum>45</IconNum>  
         <Default>Default</Default>  
         <AcceptableValues>None,Less,Default,More,Lots</AcceptableValues> 
-      </Mushrooms>  
-      <CaveBananas> 
+      </mushroom>  
+      <cave_banana> 
         <IconNum>18</IconNum>  
         <Default>Default</Default>  
         <AcceptableValues>None,Less,Default,More,Lots</AcceptableValues> 
-      </CaveBananas>  
-      <Lichen> 
+      </cave_banana>  
+      <lichen> 
         <IconNum>62</IconNum>  
         <Default>Default</Default>  
         <AcceptableValues>None,Less,Default,More,Lots</AcceptableValues> 
-      </Lichen> 
+      </lichen> 
     </Food>  
     <Animals> 
-      <Ponds> 
+      <cave_ponds> 
         <IconNum>75</IconNum>  
         <Default>Default</Default>  
         <AcceptableValues>None,Less,Default,More,Lots</AcceptableValues> 
-      </Ponds>  
-      <Slurpers> 
+      </cave_ponds>  
+      <slurper> 
         <IconNum>64</IconNum>  
         <Default>Default</Default>  
         <AcceptableValues>None,Less,Default,More,Lots</AcceptableValues> 
-      </Slurpers>  
-      <Bunnymen> 
+      </slurper>  
+      <bunnymen> 
         <IconNum>78</IconNum>  
         <Default>Default</Default>  
         <AcceptableValues>None,Less,Default,More,Lots</AcceptableValues> 
-      </Bunnymen>  
-      <Slurtles> 
+      </bunnymen>  
+      <slurtles> 
         <IconNum>70</IconNum>  
         <Default>Default</Default>  
         <AcceptableValues>None,Less,Default,More,Lots</AcceptableValues> 
-      </Slurtles>  
-      <Rocky> 
+      </slurtles>  
+      <rocky> 
         <IconNum>28</IconNum>  
         <Default>Default</Default>  
         <AcceptableValues>None,Less,Default,More,Lots</AcceptableValues> 
-      </Rocky>  
-      <Monkeys> 
+      </rocky>  
+      <monkey> 
         <IconNum>33</IconNum>  
         <Default>Default</Default>  
         <AcceptableValues>None,Less,Default,More,Lots</AcceptableValues> 
-      </Monkeys> 
+      </monkey> 
     </Animals>  
     <Monsters> 
-      <Spiders> 
+      <cave_spiders> 
         <IconNum>82</IconNum>  
         <Default>Default</Default>  
         <AcceptableValues>None,Less,Default,More,Lots</AcceptableValues> 
-      </Spiders>  
-      <Tentacles> 
+      </cave_spiders>  
+      <tentacles> 
         <IconNum>11</IconNum>  
         <Default>Default</Default>  
         <AcceptableValues>None,Less,Default,More,Lots</AcceptableValues> 
-      </Tentacles>  
-      <Clockworks> 
+      </tentacles>  
+      <chess> 
         <IconNum>37</IconNum>  
         <Default>Default</Default>  
         <AcceptableValues>None,Less,Default,More,Lots</AcceptableValues> 
-      </Clockworks>  
-      <Treeguards> 
+      </chess>  
+      <liefs> 
         <IconNum>68</IconNum>  
         <Default>Default</Default>  
         <AcceptableValues>None,Less,Default,More,Lots</AcceptableValues> 
-      </Treeguards>  
-      <Bats> 
+      </liefs>  
+      <bats> 
         <IconNum>24</IconNum>  
         <Default>Default</Default>  
         <AcceptableValues>None,Less,Default,More,Lots</AcceptableValues> 
-      </Bats>  
-      <NightmareFissures> 
+      </bats>  
+      <fissure> 
         <IconNum>79</IconNum>  
         <Default>Default</Default>  
         <AcceptableValues>None,Less,Default,More,Lots</AcceptableValues> 
-      </NightmareFissures>  
-      <CaveWorms> 
+      </fissure>  
+      <worms> 
         <IconNum>89</IconNum>  
         <Default>Default</Default>  
         <AcceptableValues>None,Less,Default,More,Lots</AcceptableValues> 
-      </CaveWorms> 
+      </worms> 
     </Monsters> 
   </Cave> 
 </Presets>

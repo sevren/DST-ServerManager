@@ -96,10 +96,12 @@ gameOptions serverconfigurationtab::fillGameOptions(xmlDataValues& dataValues, Q
 		qlbl->setPixmap(QPixmap::fromImage(avatars[get<0>(dataValues[i])]));
 		qlbl->setMinimumSize(QSize(50, 50));
 		qlbl->setMaximumSize(QSize(50, 50));
+		qlbl->setToolTip(QString(get<3>(dataValues[i]).c_str()));
 		//qlbl->setToolTip(QString::fromStdString(worldN.node().name()));
 		QComboBox* qcbox = new QComboBox();
 		QStringList list=(setComboBoxValues(get<2>(dataValues[i])));
 		qcbox->addItems(list);
+		qcbox->setObjectName(QString(get<3>(dataValues[i]).c_str()));
 		
 		int index = qcbox->findData(QString::fromStdString(get<1>(dataValues[i])),Qt::DisplayRole);
 		
@@ -167,7 +169,7 @@ string  serverconfigurationtab::getServerConfigSettings(QGroupBox* groupBox)
 	while (i.hasNext())
 	{
 
-		if (!(i.peekNext()->inherits("QLabel") || i.peekNext()->inherits("QPushButton")))
+		if (!(i.peekNext()->inherits("QLabel") || i.peekNext()->inherits("QPushButton") || i.peekNext()->inherits("QGridLayout")))
 		{
 			if (i.peekNext()->inherits("QSpinBox"))
 			{
@@ -199,7 +201,359 @@ string  serverconfigurationtab::getServerConfigSettings(QGroupBox* groupBox)
 	return settings.str();
 }
 
+string serverconfigurationtab::getGameOptionSettings(QGridLayout* gridLayout)
+{
+	qDebug()<<gridLayout->count();
+	stringstream settings;
+	if ("FoodGridLayout"==gridLayout->objectName())
+	{
+		settings << "\tunprepared = { -- \"never\", \"rare\", \"default\", \"often\", \"always\"\n\t\t\t";
+	}
+	else if ("gridLayout"==gridLayout->objectName())
+	{
+		settings << "\tmisc = { \n\t\t\t";
+	}
+	else if ("ResourcesGridLayout"==gridLayout->objectName())
+	{
+		settings << "\tresources = { -- \"never\", \"rare\", \"default\", \"often\", \"always\"\n\t\t\t";
+	}
+	else if ("AnimalsGridLayout"==gridLayout->objectName())
+	{
+		settings << "\tanimals = { -- \"never\", \"rare\", \"default\", \"often\", \"always\"\n\t\t\t";
+	}
+	else if ("MonstersGridLayout"==gridLayout->objectName())
+	{
+		settings << "\tmonsters = { -- \"never\", \"rare\", \"default\", \"often\", \"always\"\n\t\t\t";
+	}
 
+
+	if ("gridLayout"==gridLayout->objectName())
+	{
+		for (int i = 0; i < gridLayout->count(); ++i)
+		{
+		  QWidget *widget = gridLayout->itemAt(i)->widget();
+		  if ((widget != NULL) && (widget->inherits("QComboBox")))
+		  {
+			QComboBox* tempComboBox=qobject_cast<QComboBox*>(widget);
+			settings << tempComboBox->objectName().toStdString() << "=" << '"'<< handleWorldData(tempComboBox->objectName().toStdString(),tempComboBox->itemData(tempComboBox->currentIndex(),Qt::DisplayRole).toString().toStdString()) <<'"'<<",\n\t\t\t";
+		  }
+	 
+		}
+	}
+	else
+	{
+		for (int i = 0; i < gridLayout->count(); ++i)
+		{
+		  QWidget *widget = gridLayout->itemAt(i)->widget();
+		  if ((widget != NULL) && (widget->inherits("QComboBox")))
+		  {
+			QComboBox* tempComboBox=qobject_cast<QComboBox*>(widget);
+			settings << tempComboBox->objectName().toStdString() << "=" << '"'<< convertComboData(tempComboBox->itemData(tempComboBox->currentIndex(),Qt::DisplayRole).toString().toStdString()) <<'"'<<",\n\t\t\t";
+		  }
+	 
+		}
+	}
+	settings <<"},\n";
+	return settings.str();
+}
+
+string serverconfigurationtab::convertComboData(string pickedItem)
+{
+	string convertedItem;
+	if ("None"==pickedItem)
+	{
+		convertedItem="never";
+	}
+	else if ("Less"==pickedItem)
+	{
+		convertedItem="rare";
+	}
+	else if ("Default"==pickedItem)
+	{
+		convertedItem="default";
+	}
+	else if ("More"==pickedItem)
+	{
+		convertedItem="often";
+	}
+	else if ("Lots"==pickedItem)
+	{
+		convertedItem="always";
+	}
+	return convertedItem; 
+}
+
+string serverconfigurationtab::handleWorldData(string name,string pickedItem)
+{
+	string convertedItem;
+	if (("autumn"==name) || ("spring"==name) || ("summer"==name)||("winter"==name))
+	{
+		//autumn = "default", -- "noseason", "veryshortseason", "shortseason", "default", "longseason", "verylongseason", "random"
+		if("None"==pickedItem)
+		{
+			convertedItem="noseason";
+		}
+		else if ("Very short"==pickedItem)
+		{
+			convertedItem="veryshortseason";
+		}
+		else if ("Short"==pickedItem)
+		{
+			convertedItem="shortseason";
+		}
+		else if ("Default"==pickedItem)
+		{
+			convertedItem="default";
+		}
+		else if ("Long"==pickedItem)
+		{
+			convertedItem="longseason";
+		}
+		else if ("Very long"==pickedItem)
+		{
+			convertedItem="verylongseason";
+		}
+		else if ("Random"==pickedItem)
+		{
+			convertedItem="random";
+		}
+
+	}
+	else if ("branching"==name) //can be converted to lower case with spaces removed
+	{
+		if("Never"==pickedItem)
+		{
+			convertedItem="never";
+		}
+		else if ("Least"==pickedItem)
+		{
+			convertedItem="least";
+		}
+		else if ("Default"==pickedItem)
+		{
+			convertedItem="default";
+		}
+		else if ("Most"==pickedItem)
+		{
+			convertedItem="most";
+		}	
+
+	}
+	else if ("cavelight"==name) //can be converted to lower case with spaces removed.
+	{
+		if("Very Slow"==pickedItem)
+		{
+			convertedItem="veryslow";
+		}
+		else if ("Slow"==pickedItem)
+		{
+			convertedItem="slow";
+		}
+		else if ("Default"==pickedItem)
+		{
+			convertedItem="default";
+		}
+		else if ("Fast"==pickedItem)
+		{
+			convertedItem="fast";
+		}
+		else if ("Very Fast"==pickedItem)
+		{
+			convertedItem="veryfast";
+		}
+
+	}
+	else if ("day"==name) //can just be trimmed and spaces removed and converted to lower case
+	{
+		//day = "default", -- "default", "longday", "longdusk", "longnight", "noday", "nodusk", "nonight", "onlyday", "onlydusk", "onlynight"
+		if("Default"==pickedItem)
+		{
+			convertedItem="default";
+		}
+		else if ("Long Day"==pickedItem)
+		{
+			convertedItem="longday";
+		}
+		else if ("Long Dusk"==pickedItem)
+		{
+			convertedItem="longdusk";
+		}
+		else if ("Long Night"==pickedItem)
+		{
+			convertedItem="longnight";
+		}
+		else if ("No Day"==pickedItem)
+		{
+			convertedItem="noday";
+		}
+		else if ("No Dusk"==pickedItem)
+		{
+			convertedItem="nodusk";
+		}
+		else if ("No Night"==pickedItem)
+		{
+			convertedItem="nonight";
+		}
+		else if ("Only Day"==pickedItem)
+		{
+			convertedItem="onlyday";
+		}
+		else if ("Only Dusk"==pickedItem)
+		{
+			convertedItem="onlydusk";
+		}
+		else if ("Only Night"==pickedItem)
+		{
+			convertedItem="onlynight";
+		}
+
+	}
+	else if ("loop"==name) //can just be converted to lower case
+	{
+		if("Never"==pickedItem)
+		{
+			convertedItem="never";
+		}
+		else if ("Default"==pickedItem)
+		{
+			convertedItem="default";
+		}
+		else if ("Always"==pickedItem)
+		{
+			convertedItem="always";
+		}
+		
+
+	}
+	else if ("regrowth"==name) //can be converted to lower case and spaces removed.
+	{
+		if("Very Slow"==pickedItem)
+		{
+			convertedItem="veryslow";
+		}
+		else if ("Slow"==pickedItem)
+		{
+			convertedItem="slow";
+		}
+		else if ("Default"==pickedItem)
+		{
+			convertedItem="default";
+		}
+		else if ("Fast"==pickedItem)
+		{
+			convertedItem="fast";
+		}
+		else if ("Very Fast"==pickedItem)
+		{
+			convertedItem="veryfast";
+		}
+		
+	}
+	else if ("season_start"==name)
+	{
+		//season_start = "default", -- "default", "winter", "spring", "summer", "autumnorspring", "winterorsummer", "random"
+		if("Autumn"==pickedItem)
+		{
+			convertedItem="default";
+		}
+		else if ("Winter"==pickedItem)
+		{
+			convertedItem="winter";
+		}
+		else if ("Spring"==pickedItem)
+		{
+			convertedItem="spring";
+		}
+		else if ("Summer"==pickedItem)
+		{
+			convertedItem="summer";
+		}
+		else if ("Autumn/Spring"==pickedItem)
+		{
+			convertedItem="autumnorspring";
+		}
+		else if ("Winter/Summer"==pickedItem)
+		{
+			convertedItem="winterorsummer";
+		}
+		else if ("Random"==pickedItem)
+		{
+			convertedItem="random";
+		}
+		
+	}
+	else if ("start_location"==name)
+	{
+		//start_location = "default", -- "caves", "default", "plus", "darkness"
+		if("Caves"==pickedItem)
+		{
+			convertedItem="caves";
+		}
+		else if ("Default"==pickedItem)
+		{
+			convertedItem="default";
+		}
+		else if ("Plus"==pickedItem)
+		{
+			convertedItem="plus";
+		}
+		else if ("Dark"==pickedItem)
+		{
+			convertedItem="darkness";
+		}
+
+	}
+	else if("task_set"==name)//biomes
+	{
+		//task_set = "cave_default", -- "classic", "default", "cave_default"
+		if("Classic"==pickedItem)
+		{
+			convertedItem="classic";
+		}
+		else if ("Together"==pickedItem)
+		{
+			convertedItem="default";
+		}
+		else if ("Underground"==pickedItem)
+		{
+			convertedItem="cave_default";
+		}
+
+	}
+	else if ("world_size"==name)
+	{
+		//world_size = "default", -- "small", "medium", "default", "huge"
+		if("Small"==pickedItem)
+		{
+			convertedItem="small";
+		}
+		else if ("Medium"==pickedItem)
+		{
+			convertedItem="medium";
+		}
+		else if ("Large"==pickedItem)
+		{
+			convertedItem="default";
+		}
+		else if ("Huge"==pickedItem)
+		{
+			convertedItem="huge";
+		}
+	}
+	else
+	{
+		convertedItem=convertComboData(pickedItem);
+	}
+	return convertedItem;
+}
+
+string serverconfigurationtab::fetchPreset()
+{
+	//preset = "DST_CAVE", --  or "SURVIVAL_TOGETHER" or "SURVIVAL_TOGETHER_CLASSIC" or "SURVIVAL_DEFAULT_PLUS" or "COMPLETE_DARKNESS" or "DST_CAVE"
+	string preset="SURVIVAL_TOGETHER";
+	
+	return "\t\tpreset = \""+preset+"\",\n\t\t";;
+}
 
 void serverconfigurationtab::saveSettings()
 {
@@ -217,4 +571,32 @@ void serverconfigurationtab::saveSettings()
 	myfile << "[SHARD]\n";
 	myfile << getServerConfigSettings(ui.shardSettings) << "\n\n";
 	myfile.close();
+
+	filePathName=serverDirectoryPath+QString(QDir::separator())+"server.ini";
+	myfile.open (filePathName.toStdString());
+	myfile << "[SHARD]\n";
+	myfile << ui.is_master->objectName().toStdString() << "=" <<((ui.is_master->isChecked()) ? ("true") : ("false") ) <<"\n";
+	myfile << ui.name->objectName().toStdString() << "=" << ui.name->text().toStdString() <<"\n";
+	myfile << ui.id->objectName().toStdString() << "=" << ui.id->text().toStdString() <<"\n";
+	myfile << "[STEAM]\n";
+	myfile << ui.authentication_port->objectName().toStdString() << "=" << ui.authentication_port->value()<<"\n";
+	myfile << ui.master_server_port->objectName().toStdString() << "=" << ui.master_server_port->value()<<"\n";
+	myfile << "[NETWORK]\n";
+	myfile << ui.server_port->objectName().toStdString() << "=" << ui.server_port->value()<<"\n";
+	myfile.close();
+
+
+	filePathName=serverDirectoryPath+QString(QDir::separator())+"worldgenoverride.lua";
+	myfile.open (filePathName.toStdString());
+	myfile << "return {\n \t\t override_enabled = true, \n";
+	//myfile << fetchPreset();
+	myfile << getGameOptionSettings(ui.FoodGridLayout) << "\n";
+	myfile << getGameOptionSettings(ui.gridLayout) << "\n";
+	myfile << getGameOptionSettings(ui.AnimalsGridLayout) << "\n";
+	myfile << getGameOptionSettings(ui.MonstersGridLayout) << "\n";
+	myfile << getGameOptionSettings(ui.ResourcesGridLayout) << "\n";
+	myfile << "}";
+	myfile.close();
+
+	
 }
