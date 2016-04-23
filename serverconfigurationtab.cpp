@@ -5,22 +5,48 @@
 #include <QDebug>
 #include <boost/foreach.hpp>
 #include <boost/tokenizer.hpp>
-#define WINVER 0x0500
-#include <windows.h>
+#include <boost/algorithm/string.hpp>
+#include <boost/algorithm/string/iter_find.hpp>
 #include <iostream>
 #include <fstream>
 #include <sstream>
 #include <qdir.h>
+#include <qmessagebox.h>
+#include <random>
+#include <boost/bimap.hpp>
+
 
 using namespace std;
 using namespace boost;
 
-serverconfigurationtab::serverconfigurationtab(QString preset,QString serverDirectoryPath,QImage*avatars, xmlDataValues& WorldArray,xmlDataValues& ResourcesArray,xmlDataValues& FoodArray,xmlDataValues& AnimalsArray,xmlDataValues& MonstersArray,QWidget *parent)
+
+
+
+serverconfigurationtab::serverconfigurationtab(QString preset,QString serverDirectoryPath,QImage*avatars, xmlDataValues& WorldArray,xmlDataValues& ResourcesArray,xmlDataValues& FoodArray,xmlDataValues& AnimalsArray,xmlDataValues& MonstersArray,bool linked,QWidget *parent)
 	: QWidget(parent)
 {
 
 	ui.setupUi(this);
 	this->serverDirectoryPath=serverDirectoryPath;
+	this->linked=linked;
+	this->preset=preset;
+	readMaps();
+
+	qDebug() << "The number of items in season_start is " << seasonstart_map.size();
+	
+	for( gameOptionsMapping::const_iterator iter = seasonstart_map.begin(), iend = seasonstart_map.end(); iter != iend; ++iter )
+	{
+		// iter->left  : data : std:string
+		// iter->right : data : std::string
+
+		qDebug() << iter->left.c_str() << " <--> " << iter->right.c_str();
+	}
+
+	//use left when going from gui to file && use right when going from file to gui
+	gameOptionsMapping::left_const_iterator iter = seasonstart_map.left.find("Winter/Summer");
+	qDebug() << iter->second.c_str();
+
+
 	/*qDebug() << "Size of  World Array: " <<WorldArray.size();
 	qDebug() << "Size of  Resources Array: " <<ResourcesArray.size();
 	qDebug() << "Size of  Food Array: " <<FoodArray.size();
@@ -62,7 +88,33 @@ serverconfigurationtab::serverconfigurationtab(QString preset,QString serverDire
 
 
 	}
+	
+
+	ui.authentication_port->setValue(setRandomPort(8766,65535));
+	ui.master_server_port->setValue(setRandomPort(27016,65535));
+	ui.server_port->setValue(setRandomPort(10999,11018));
+	
+
+	if (linked && "Forest"==preset)
+	{
+		ui.shard_enabled->setChecked(true);
+		ui.is_master->setChecked(true);
+		ui.cluster_key->setText("41AF3DC");
+
+	}
+	else if (linked && "Cave"==preset)
+	{
+		ui.shard_enabled->setChecked(true);
+		ui.is_master->setChecked(false);
+		ui.cluster_key->setText("41AF3DC");
+		ui.id->setText(QString::number(setRandomPort(0,65535)));
+	//	ui.serverSettings->setVisible(false);
+	}
+
+
+
 	connect(ui.saveBtn,SIGNAL(clicked()),this,SLOT(saveSettings()));
+	connect(ui.runBtn,SIGNAL(clicked()),this,SLOT(run()));
 	
 }
 
@@ -72,6 +124,17 @@ serverconfigurationtab::~serverconfigurationtab()
 
 }
 
+int serverconfigurationtab::setRandomPort(int min,int max)
+{
+	std::random_device rd;     // only used once to initialise (seed) engine
+	std::mt19937 rng(rd());    // random-number engine used (Mersenne-Twister in this case)
+	std::uniform_int_distribution<int> uni(min,max); // guaranteed unbiased
+
+	auto  random_integer = uni(rng);
+	return random_integer;
+}
+
+
 QStringList serverconfigurationtab::setComboBoxValues(string values)
 {
 	QStringList stringList;
@@ -79,7 +142,7 @@ QStringList serverconfigurationtab::setComboBoxValues(string values)
 	char_separator<char> sep(",");
     tokenizer< char_separator<char> > tokens(values, sep);
     BOOST_FOREACH (const string& t, tokens) {
-		qDebug() << QString::fromStdString(t);
+		//qDebug() << QString::fromStdString(t);
 		stringList.append(QString::fromStdString(t));
     }
 	return stringList;
@@ -120,19 +183,19 @@ void serverconfigurationtab::setupUserGameOptionsScreen(gameOptions& gOArray, in
 	switch(dataType)
 	{
 		case _WORLD_:
-			gLayout=ref(ui.gridLayout);
+			gLayout=std::ref(ui.gridLayout);
 		break;
 		case _RESOURCES_:
-			gLayout=ref(ui.ResourcesGridLayout);
+			gLayout=std::ref(ui.ResourcesGridLayout);
 		break;
 		case _FOOD_:
-			gLayout=ref(ui.FoodGridLayout);
+			gLayout=std::ref(ui.FoodGridLayout);
 		break;
 		case _ANIMALS_:
-			gLayout=ref(ui.AnimalsGridLayout);
+			gLayout=std::ref(ui.AnimalsGridLayout);
 		break;
 		case _MONSTERS_:
-			gLayout=ref(ui.MonstersGridLayout);
+			gLayout=std::ref(ui.MonstersGridLayout);
 		break;
 	}
 
@@ -146,7 +209,7 @@ void serverconfigurationtab::setupUserGameOptionsScreen(gameOptions& gOArray, in
 				{
 					break;
 				}
-				qDebug() << gridRow<<","<< gridCol<< "  counter is "<< counter << " index is" << indx;
+			//	qDebug() << gridRow<<","<< gridCol<< "  counter is "<< counter << " index is" << indx;
 				
 
 				gLayout->addWidget(gOArray[indx].first,gridRow,gridCol);
@@ -184,7 +247,10 @@ string  serverconfigurationtab::getServerConfigSettings(QGroupBox* groupBox)
 			else if (i.peekNext()->inherits("QCheckBox"))
 			{
 				QCheckBox* tempCheckBox=qobject_cast<QCheckBox *>(i.next());
-				settings << tempCheckBox->objectName().toStdString() << "=" <<((tempCheckBox->isChecked()) ? ("true") : ("false") ) <<"\n";
+				if ("is_master"!=tempCheckBox->objectName().toStdString())
+				{
+					settings << tempCheckBox->objectName().toStdString() << "=" <<((tempCheckBox->isChecked()) ? ("true") : ("false") ) <<"\n";
+				}
 			}
 			else if (i.peekNext()->inherits("QComboBox"))
 			{
@@ -203,7 +269,7 @@ string  serverconfigurationtab::getServerConfigSettings(QGroupBox* groupBox)
 
 string serverconfigurationtab::getGameOptionSettings(QGridLayout* gridLayout)
 {
-	qDebug()<<gridLayout->count();
+	//qDebug()<<gridLayout->count();
 	stringstream settings;
 	if ("FoodGridLayout"==gridLayout->objectName())
 	{
@@ -259,292 +325,97 @@ string serverconfigurationtab::getGameOptionSettings(QGridLayout* gridLayout)
 
 string serverconfigurationtab::convertComboData(string pickedItem)
 {
-	string convertedItem;
-	if ("None"==pickedItem)
-	{
-		convertedItem="never";
-	}
-	else if ("Less"==pickedItem)
-	{
-		convertedItem="rare";
-	}
-	else if ("Default"==pickedItem)
-	{
-		convertedItem="default";
-	}
-	else if ("More"==pickedItem)
-	{
-		convertedItem="often";
-	}
-	else if ("Lots"==pickedItem)
-	{
-		convertedItem="always";
-	}
-	return convertedItem; 
+	gameOptionsMapping::left_const_iterator iter = other_map.left.find(pickedItem);
+	return iter->second.c_str();
 }
 
 string serverconfigurationtab::handleWorldData(string name,string pickedItem)
 {
-	string convertedItem;
 	if (("autumn"==name) || ("spring"==name) || ("summer"==name)||("winter"==name))
 	{
 		//autumn = "default", -- "noseason", "veryshortseason", "shortseason", "default", "longseason", "verylongseason", "random"
-		if("None"==pickedItem)
-		{
-			convertedItem="noseason";
-		}
-		else if ("Very short"==pickedItem)
-		{
-			convertedItem="veryshortseason";
-		}
-		else if ("Short"==pickedItem)
-		{
-			convertedItem="shortseason";
-		}
-		else if ("Default"==pickedItem)
-		{
-			convertedItem="default";
-		}
-		else if ("Long"==pickedItem)
-		{
-			convertedItem="longseason";
-		}
-		else if ("Very long"==pickedItem)
-		{
-			convertedItem="verylongseason";
-		}
-		else if ("Random"==pickedItem)
-		{
-			convertedItem="random";
-		}
-
+		gameOptionsMapping::left_const_iterator iter = seasons_map.left.find(pickedItem);
+		return iter->second.c_str();
 	}
 	else if ("branching"==name) //can be converted to lower case with spaces removed
 	{
-		if("Never"==pickedItem)
-		{
-			convertedItem="never";
-		}
-		else if ("Least"==pickedItem)
-		{
-			convertedItem="least";
-		}
-		else if ("Default"==pickedItem)
-		{
-			convertedItem="default";
-		}
-		else if ("Most"==pickedItem)
-		{
-			convertedItem="most";
-		}	
+		gameOptionsMapping::left_const_iterator iter = branching_map.left.find(pickedItem);
+		return iter->second.c_str();
 
 	}
 	else if ("cavelight"==name) //can be converted to lower case with spaces removed.
 	{
-		if("Very Slow"==pickedItem)
-		{
-			convertedItem="veryslow";
-		}
-		else if ("Slow"==pickedItem)
-		{
-			convertedItem="slow";
-		}
-		else if ("Default"==pickedItem)
-		{
-			convertedItem="default";
-		}
-		else if ("Fast"==pickedItem)
-		{
-			convertedItem="fast";
-		}
-		else if ("Very Fast"==pickedItem)
-		{
-			convertedItem="veryfast";
-		}
+		gameOptionsMapping::left_const_iterator iter = cavelight_map.left.find(pickedItem);
+		return iter->second.c_str();
 
 	}
 	else if ("day"==name) //can just be trimmed and spaces removed and converted to lower case
 	{
 		//day = "default", -- "default", "longday", "longdusk", "longnight", "noday", "nodusk", "nonight", "onlyday", "onlydusk", "onlynight"
-		if("Default"==pickedItem)
-		{
-			convertedItem="default";
-		}
-		else if ("Long Day"==pickedItem)
-		{
-			convertedItem="longday";
-		}
-		else if ("Long Dusk"==pickedItem)
-		{
-			convertedItem="longdusk";
-		}
-		else if ("Long Night"==pickedItem)
-		{
-			convertedItem="longnight";
-		}
-		else if ("No Day"==pickedItem)
-		{
-			convertedItem="noday";
-		}
-		else if ("No Dusk"==pickedItem)
-		{
-			convertedItem="nodusk";
-		}
-		else if ("No Night"==pickedItem)
-		{
-			convertedItem="nonight";
-		}
-		else if ("Only Day"==pickedItem)
-		{
-			convertedItem="onlyday";
-		}
-		else if ("Only Dusk"==pickedItem)
-		{
-			convertedItem="onlydusk";
-		}
-		else if ("Only Night"==pickedItem)
-		{
-			convertedItem="onlynight";
-		}
-
+		gameOptionsMapping::left_const_iterator iter = day_map.left.find(pickedItem);
+		return iter->second.c_str();
 	}
 	else if ("loop"==name) //can just be converted to lower case
 	{
-		if("Never"==pickedItem)
-		{
-			convertedItem="never";
-		}
-		else if ("Default"==pickedItem)
-		{
-			convertedItem="default";
-		}
-		else if ("Always"==pickedItem)
-		{
-			convertedItem="always";
-		}
-		
+		gameOptionsMapping::left_const_iterator iter = loop_map.left.find(pickedItem);
+		return iter->second.c_str();
 
 	}
 	else if ("regrowth"==name) //can be converted to lower case and spaces removed.
 	{
-		if("Very Slow"==pickedItem)
-		{
-			convertedItem="veryslow";
-		}
-		else if ("Slow"==pickedItem)
-		{
-			convertedItem="slow";
-		}
-		else if ("Default"==pickedItem)
-		{
-			convertedItem="default";
-		}
-		else if ("Fast"==pickedItem)
-		{
-			convertedItem="fast";
-		}
-		else if ("Very Fast"==pickedItem)
-		{
-			convertedItem="veryfast";
-		}
-		
+		gameOptionsMapping::left_const_iterator iter = regrowth_map.left.find(pickedItem);
+		return iter->second.c_str();
 	}
 	else if ("season_start"==name)
 	{
 		//season_start = "default", -- "default", "winter", "spring", "summer", "autumnorspring", "winterorsummer", "random"
-		if("Autumn"==pickedItem)
-		{
-			convertedItem="default";
-		}
-		else if ("Winter"==pickedItem)
-		{
-			convertedItem="winter";
-		}
-		else if ("Spring"==pickedItem)
-		{
-			convertedItem="spring";
-		}
-		else if ("Summer"==pickedItem)
-		{
-			convertedItem="summer";
-		}
-		else if ("Autumn/Spring"==pickedItem)
-		{
-			convertedItem="autumnorspring";
-		}
-		else if ("Winter/Summer"==pickedItem)
-		{
-			convertedItem="winterorsummer";
-		}
-		else if ("Random"==pickedItem)
-		{
-			convertedItem="random";
-		}
-		
+		gameOptionsMapping::left_const_iterator iter = seasonstart_map.left.find(pickedItem);
+		return iter->second.c_str();
 	}
 	else if ("start_location"==name)
 	{
-		//start_location = "default", -- "caves", "default", "plus", "darkness"
-		if("Caves"==pickedItem)
-		{
-			convertedItem="caves";
-		}
-		else if ("Default"==pickedItem)
-		{
-			convertedItem="default";
-		}
-		else if ("Plus"==pickedItem)
-		{
-			convertedItem="plus";
-		}
-		else if ("Dark"==pickedItem)
-		{
-			convertedItem="darkness";
-		}
-
+		gameOptionsMapping::left_const_iterator iter = startlocation_map.left.find(pickedItem);
+		return iter->second.c_str();
 	}
 	else if("task_set"==name)//biomes
 	{
 		//task_set = "cave_default", -- "classic", "default", "cave_default"
-		if("Classic"==pickedItem)
-		{
-			convertedItem="classic";
-		}
-		else if ("Together"==pickedItem)
-		{
-			convertedItem="default";
-		}
-		else if ("Underground"==pickedItem)
-		{
-			convertedItem="cave_default";
-		}
-
+		gameOptionsMapping::left_const_iterator iter = taskset_map.left.find(pickedItem);
+		return iter->second.c_str();
 	}
 	else if ("world_size"==name)
 	{
-		//world_size = "default", -- "small", "medium", "default", "huge"
-		if("Small"==pickedItem)
-		{
-			convertedItem="small";
-		}
-		else if ("Medium"==pickedItem)
-		{
-			convertedItem="medium";
-		}
-		else if ("Large"==pickedItem)
-		{
-			convertedItem="default";
-		}
-		else if ("Huge"==pickedItem)
-		{
-			convertedItem="huge";
-		}
+		gameOptionsMapping::left_const_iterator iter = worldsize_map.left.find(pickedItem);
+		return iter->second.c_str();
 	}
 	else
 	{
-		convertedItem=convertComboData(pickedItem);
+		gameOptionsMapping::left_const_iterator iter = other_map.left.find(pickedItem);
+		return iter->second.c_str();
 	}
-	return convertedItem;
+	
+}
+
+
+QString serverconfigurationtab::setupFolders()
+{
+	QString finalDir;
+	if ("Forest"==preset)
+	{
+		finalDir="Master";
+	}
+	else if ("Cave"==preset)
+	{
+		finalDir="Cave";
+	}
+	
+	QDir dir(serverDirectoryPath+QString(QDir::separator())+finalDir);
+	if (!dir.exists()) {
+		dir.mkpath(".");
+	}
+
+	return serverDirectoryPath+QString(QDir::separator())+finalDir;
+
 }
 
 string serverconfigurationtab::fetchPreset()
@@ -558,21 +429,25 @@ string serverconfigurationtab::fetchPreset()
 void serverconfigurationtab::saveSettings()
 {
 	//save all settings to the cluster.ini, server.ini and worldoverridesettings.lua
+	QString serverDirectoryPathFinal=setupFolders();
 	qDebug() << serverDirectoryPath;
+
+	
 	QString filePathName=serverDirectoryPath+QString(QDir::separator())+"cluster.ini";
 	ofstream myfile;
-	myfile.open (filePathName.toStdString());
-	myfile << "[GAMEPLAY]\n";
-	myfile << getServerConfigSettings(ui.gameplaySettings) << "\n\n";
-	myfile << "[NETWORK]\n";
-	myfile << getServerConfigSettings(ui.networkSettings) << "\n\n";
-	myfile << "[MISC]\n";
-	myfile << getServerConfigSettings(ui.miscSettings) << "\n\n";
-	myfile << "[SHARD]\n";
-	myfile << getServerConfigSettings(ui.shardSettings) << "\n\n";
-	myfile.close();
+		myfile.open (filePathName.toStdString());
+		myfile << "[GAMEPLAY]\n";
+		myfile << getServerConfigSettings(ui.gameplaySettings) << "\n\n";
+		myfile << "[NETWORK]\n";
+		myfile << getServerConfigSettings(ui.networkSettings) << "\n\n";
+		myfile << "[MISC]\n";
+		myfile << getServerConfigSettings(ui.miscSettings) << "\n\n";
+		myfile << "[SHARD]\n";
+		myfile << getServerConfigSettings(ui.shardSettings) << "\n\n";
+		myfile.close();
+	
 
-	filePathName=serverDirectoryPath+QString(QDir::separator())+"server.ini";
+	filePathName=serverDirectoryPathFinal+QString(QDir::separator())+"server.ini";
 	myfile.open (filePathName.toStdString());
 	myfile << "[SHARD]\n";
 	myfile << ui.is_master->objectName().toStdString() << "=" <<((ui.is_master->isChecked()) ? ("true") : ("false") ) <<"\n";
@@ -586,7 +461,7 @@ void serverconfigurationtab::saveSettings()
 	myfile.close();
 
 
-	filePathName=serverDirectoryPath+QString(QDir::separator())+"worldgenoverride.lua";
+	filePathName=serverDirectoryPathFinal+QString(QDir::separator())+"worldgenoverride.lua";
 	myfile.open (filePathName.toStdString());
 	myfile << "return {\n \t\t override_enabled = true, \n";
 	//myfile << fetchPreset();
@@ -599,4 +474,141 @@ void serverconfigurationtab::saveSettings()
 	myfile.close();
 
 	
+}
+
+void serverconfigurationtab::run()
+{
+	qDebug() << "Trying to run ...";
+	//get steamcmd install location
+	//run steamcmd command
+	if (linked && serverStatus()) // QMSGBox start both if both down?
+	{
+		QMessageBox msgBox;
+		msgBox.setText("Linked Servers are both down");
+		msgBox.setInformativeText("Do you want to start both or only one?");
+		msgBox.setStandardButtons(QMessageBox::Save | QMessageBox::Discard | QMessageBox::Cancel);
+		msgBox.setDefaultButton(QMessageBox::Save);
+		int ret = msgBox.exec();
+
+		switch (ret) {
+		  case QMessageBox::Save:
+			  // Save was clicked
+			  break;
+		  case QMessageBox::Discard:
+			  // Don't Save was clicked
+			  break;
+		  case QMessageBox::Cancel:
+			  // Cancel was clicked
+			  break;
+		  default:
+			  // should never be reached
+			  break;
+		}
+
+	}
+}
+
+
+bool serverconfigurationtab::serverStatus()
+{
+	return true;
+}
+
+void serverconfigurationtab::readMaps()
+{
+  string line;
+  string currentMapName="";
+  gameOptionsMapping *currentMap;
+
+  ifstream myfile (".\\Resources\\maps.txt");
+  if (myfile.is_open())
+  {
+    while ( getline (myfile,line) )
+    {
+      qDebug() << line.c_str() << '\n';
+	  if (starts_with(line,"--") && (contains(line,"seasons_map") 
+									|| contains(line,"branching_map") 
+									|| contains(line,"cavelight_map")
+									|| contains(line,"day_map")
+									|| contains(line,"loop_map") 
+									|| contains(line,"regrowth_map") 
+									|| contains(line,"seasonstart_map")
+									|| contains(line,"startlocation_map")
+									|| contains(line,"taskset_map")
+									|| contains(line,"worldsize_map")
+									|| contains(line,"other_map")))
+	  {
+		currentMapName= line.substr(2,line.length()).c_str();
+	  }
+	  else if (line !="")
+	  {
+		 qDebug() << QString::fromStdString(currentMapName);
+		 currentMap=getGameOptionsMapping(currentMapName);
+		   vector<string> extractedTokens;
+
+		char_separator<char> sep("=");
+		tokenizer< char_separator<char> > tokens(line, sep);
+		
+		BOOST_FOREACH (const string& t, tokens) {
+			qDebug() << QString::fromStdString(t);
+			extractedTokens.push_back(t);
+			//stringList.append(QString::fromStdString(t));
+			
+		}
+		currentMap->insert(gameOptionsMapping::value_type(extractedTokens.at(0),extractedTokens.at(1)));
+	  }
+	  
+    }
+    myfile.close();
+  }
+
+  else qDebug() << "Unable to open file";
+}
+
+gameOptionsMapping* serverconfigurationtab::getGameOptionsMapping(string name)
+{
+	if ("seasons_map"==name)
+	{
+		return &seasons_map;
+	}
+	else if ("branching_map"==name)
+	{
+		return &branching_map; 
+	}
+	else if("cavelight_map"==name)
+	{
+		return &cavelight_map; 
+	}
+	else if ("day_map"==name)
+	{
+		return &day_map; 
+	}
+	else if("loop_map"==name)
+	{
+		return &loop_map; 
+	}
+	else if("regrowth_map"==name)
+	{
+		return &regrowth_map; 
+	}
+	else if ("seasonstart_map"==name)
+	{
+		return &seasonstart_map; 
+	}
+	else if ("startlocation_map"==name)
+	{
+		return &startlocation_map; 
+	}
+	else if("taskset_map"==name)
+	{
+		return &taskset_map; 
+	}
+	else if ("worldsize_map"==name)
+	{
+		return &worldsize_map; 
+	}
+	else if("other_map"==name)
+	{
+		return &other_map; 
+	}
 }

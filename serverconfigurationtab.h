@@ -9,14 +9,14 @@
 #define _MONSTERS_ 4
 
 #include <QWidget>
+#include <boost/bimap.hpp>
 #include "ui_serverconfigurationtab.h"
 
 using namespace std;
 
 typedef vector<pair<QLabel*,QComboBox*>> gameOptions;
-typedef vector<tuple<int,string,string,string>> xmlDataValues;
-
-
+typedef vector<std::tuple<int,std::string,std::string,std::string>> xmlDataValues;
+typedef boost::bimap< std::string, std::string> gameOptionsMapping;
 
 
 class serverconfigurationtab : public QWidget
@@ -25,15 +25,31 @@ class serverconfigurationtab : public QWidget
 	
 
 public:
-	serverconfigurationtab(QString preset,QString serverDirectoryPath, QImage*, xmlDataValues&,xmlDataValues&,xmlDataValues&,xmlDataValues&,xmlDataValues&,QWidget *parent = 0);
+	serverconfigurationtab(QString preset,QString serverDirectoryPath, QImage*, xmlDataValues&,xmlDataValues&,xmlDataValues&,xmlDataValues&,xmlDataValues&,bool,QWidget *parent = 0);
 	~serverconfigurationtab();
 
 private slots:
 		void saveSettings();
+		void run();
 
 private:
 	Ui::serverconfigurationtab ui;
 	QString serverDirectoryPath;
+	bool linked;
+	QString preset;
+
+	//we need bi directional maps because the value to display value are completely diffrent :(
+	gameOptionsMapping seasons_map;
+	gameOptionsMapping branching_map;
+	gameOptionsMapping cavelight_map;
+	gameOptionsMapping day_map;
+	gameOptionsMapping loop_map;
+	gameOptionsMapping regrowth_map;
+	gameOptionsMapping seasonstart_map;
+	gameOptionsMapping startlocation_map;
+	gameOptionsMapping taskset_map;
+	gameOptionsMapping worldsize_map;
+	gameOptionsMapping other_map;
 
 	//Need to keep track of all the presets
 
@@ -61,6 +77,12 @@ private:
 	string serverconfigurationtab::convertComboData(string pickedItem);
 	string serverconfigurationtab::handleWorldData(string name,string pickedItem);
 	string serverconfigurationtab::fetchPreset();
+	QString serverconfigurationtab::setupFolders();
+	int serverconfigurationtab::setRandomPort(int,int);
+	void serverconfigurationtab::saveServerManConfig();
+	bool serverconfigurationtab::serverStatus();
+	void serverconfigurationtab::readMaps();
+	gameOptionsMapping* serverconfigurationtab::getGameOptionsMapping(string);
 };
 
 #endif // SERVERCONFIGURATIONTAB_H

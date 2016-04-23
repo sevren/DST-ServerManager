@@ -127,6 +127,7 @@ void dstServerManager::closeTab_(int index)
 void dstServerManager::setupConnections()
 {
 	connect(ui.actionNew,SIGNAL(triggered()),this,SLOT(createNewServerConfig()));
+	connect(ui.actionOpen,SIGNAL(triggered()),this,SLOT(openDialog()));
 }
 
 
@@ -144,18 +145,18 @@ void dstServerManager::getData(QString serverTabName, QString preset, QString se
 	qDebug() << serverDirectoryPath;
 	if ("Forest"==preset)
 	{
-		tabWidget->addTab(new serverconfigurationtab(preset,serverDirectoryPath,avatars,ForestWorldArray,ForestResourcesArray,ForestFoodArray,ForestAnimalsArray,ForestMonstersArray),serverTabName);
+		tabWidget->addTab(new serverconfigurationtab(preset,serverDirectoryPath,avatars,ForestWorldArray,ForestResourcesArray,ForestFoodArray,ForestAnimalsArray,ForestMonstersArray,false),serverTabName);
 	
 	}
 	else if ("Cave"==preset)
 	{
-		tabWidget->addTab(new serverconfigurationtab(preset,serverDirectoryPath,avatars,CaveWorldArray,CaveResourcesArray,CaveFoodArray,CaveAnimalsArray,CaveMonstersArray),serverTabName);
+		tabWidget->addTab(new serverconfigurationtab(preset,serverDirectoryPath,avatars,CaveWorldArray,CaveResourcesArray,CaveFoodArray,CaveAnimalsArray,CaveMonstersArray,false),serverTabName);
 	
 	}
 	else if ("Both"==preset)
 	{
-		tabWidget->addTab(new serverconfigurationtab("Forest",serverDirectoryPath,avatars,ForestWorldArray,ForestResourcesArray,ForestFoodArray,ForestAnimalsArray,ForestMonstersArray),serverTabName+"_forest");
-		tabWidget->addTab(new serverconfigurationtab("Cave",serverDirectoryPath,avatars,CaveWorldArray,CaveResourcesArray,CaveFoodArray,CaveAnimalsArray,CaveMonstersArray),serverTabName+"_cave");
+		tabWidget->addTab(new serverconfigurationtab("Forest",serverDirectoryPath,avatars,ForestWorldArray,ForestResourcesArray,ForestFoodArray,ForestAnimalsArray,ForestMonstersArray,true),serverTabName+"_forest");
+		tabWidget->addTab(new serverconfigurationtab("Cave",serverDirectoryPath,avatars,CaveWorldArray,CaveResourcesArray,CaveFoodArray,CaveAnimalsArray,CaveMonstersArray,true),serverTabName+"_cave");
 	
 	}
 }

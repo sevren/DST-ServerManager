@@ -61,11 +61,11 @@
         <Default>Default</Default>  
         <AcceptableValues>Default,Long Day,Long Dusk,Long Night,No Day,No Dusk,No Night,Only Day,Only Dusk,Only Night</AcceptableValues> 
       </day>  
-      <rain> 
+      <weather> 
         <IconNum>87</IconNum>  
         <Default>Default</Default>  
         <AcceptableValues>None,Less,Default,More,Lots</AcceptableValues> 
-      </rain>  
+      </weather>  
       <lightning> 
         <IconNum>74</IconNum>  
         <Default>Default</Default>  
@@ -378,11 +378,11 @@
         <Default>Default</Default>  
         <AcceptableValues>Never,Default,Always</AcceptableValues> 
       </loop>  
-      <rain> 
+      <weather> 
         <IconNum>87</IconNum>  
         <Default>Default</Default>  
         <AcceptableValues>None,Less,Default,More,Lots</AcceptableValues> 
-      </rain>  
+      </weather>  
       <earthquakes> 
         <IconNum>67</IconNum>  
         <Default>Default</Default>  
