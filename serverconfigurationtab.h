@@ -11,6 +11,7 @@
 #include <QWidget>
 #include <boost/bimap.hpp>
 #include "ui_serverconfigurationtab.h"
+#include "qsettings.h"
 
 using namespace std;
 
@@ -26,7 +27,9 @@ class serverconfigurationtab : public QWidget
 
 public:
 	serverconfigurationtab(QString preset,QString serverDirectoryPath, QImage*, xmlDataValues&,xmlDataValues&,xmlDataValues&,xmlDataValues&,xmlDataValues&,bool,QWidget *parent = 0);
+	serverconfigurationtab(QString fileNameToOpen,QImage*, xmlDataValues&,xmlDataValues&,xmlDataValues&,xmlDataValues&,xmlDataValues&,bool,QWidget *parent = 0);
 	~serverconfigurationtab();
+
 
 private slots:
 		void saveSettings();
@@ -37,6 +40,8 @@ private:
 	QString serverDirectoryPath;
 	bool linked;
 	QString preset;
+	QSettings *settingsIni;
+	
 
 	//we need bi directional maps because the value to display value are completely diffrent :(
 	gameOptionsMapping seasons_map;
@@ -73,7 +78,9 @@ private:
 	gameOptions serverconfigurationtab::fillGameOptions(xmlDataValues&, QImage*);
 	void serverconfigurationtab::setupUserGameOptionsScreen(gameOptions& gOArray, int dataType);
 	string  serverconfigurationtab::getServerConfigSettings(QGroupBox* groupBox);
+	void serverconfigurationtab::setServerConfigSettings(QGroupBox* groupBox);
 	string  serverconfigurationtab::getGameOptionSettings(QGridLayout* gridLayout);
+	void  serverconfigurationtab::setGameOptionSettings(QGridLayout* gridLayout);
 	string serverconfigurationtab::convertComboData(string pickedItem);
 	string serverconfigurationtab::handleWorldData(string name,string pickedItem);
 	string serverconfigurationtab::fetchPreset();

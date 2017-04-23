@@ -14,6 +14,7 @@
 #include <qmessagebox.h>
 #include <random>
 #include <boost/bimap.hpp>
+#include <qsettings.h>
 
 
 using namespace std;
@@ -31,7 +32,12 @@ serverconfigurationtab::serverconfigurationtab(QString preset,QString serverDire
 	this->linked=linked;
 	this->preset=preset;
 	readMaps();
-
+	QString settingsPath=serverDirectoryPath+QString(QDir::separator());
+	
+	//QSettings s(QString(settingsPath+QString("testing")+".ini"),QSettings::IniFormat);
+	this->settingsIni=new QSettings(QString(settingsPath+QString("testing")+".ini"),QSettings::IniFormat);
+	this->settingsIni->setValue("preset",preset);
+	this->settingsIni->setValue("linked",linked);
 	qDebug() << "The number of items in season_start is " << seasonstart_map.size();
 	
 	for( gameOptionsMapping::const_iterator iter = seasonstart_map.begin(), iend = seasonstart_map.end(); iter != iend; ++iter )
@@ -115,6 +121,36 @@ serverconfigurationtab::serverconfigurationtab(QString preset,QString serverDire
 
 	connect(ui.saveBtn,SIGNAL(clicked()),this,SLOT(saveSettings()));
 	connect(ui.runBtn,SIGNAL(clicked()),this,SLOT(run()));
+	
+}
+serverconfigurationtab::serverconfigurationtab(QString fileToOpen,QImage*avatars, xmlDataValues& WorldArray,xmlDataValues& ResourcesArray,xmlDataValues& FoodArray,xmlDataValues& AnimalsArray,xmlDataValues& MonstersArray,bool linked,QWidget *parent)
+	: QWidget(parent)
+{
+
+	this->settingsIni=new QSettings(fileToOpen,QSettings::IniFormat);
+	qDebug() << "Listing all the keys";
+	qDebug() << this->settingsIni->allKeys();
+	serverDirectoryPath=QFileInfo(fileToOpen).path();
+	qDebug() << "The Set server directory path is: "<<serverDirectoryPath;
+	preset=this->settingsIni->value("preset").toString();
+	linked=this->settingsIni->value("linked").toBool();
+	qDebug() << "preset is "<< preset;
+	qDebug() << "islinked" << linked;
+
+
+	serverconfigurationtab* x=new serverconfigurationtab(preset,serverDirectoryPath,avatars,WorldArray,ResourcesArray,FoodArray,AnimalsArray,MonstersArray,linked,this);
+	setServerConfigSettings(x->ui.gameplaySettings);
+	setServerConfigSettings(x->ui.networkSettings);
+	setServerConfigSettings(x->ui.miscSettings);
+	setServerConfigSettings(x->ui.shardSettings);
+	setServerConfigSettings(x->ui.steamSettings);
+
+	setGameOptionSettings(x->ui.FoodGridLayout);
+	setGameOptionSettings(x->ui.gridLayout);
+	setGameOptionSettings(x->ui.AnimalsGridLayout);
+	setGameOptionSettings(x->ui.MonstersGridLayout);
+	setGameOptionSettings(x->ui.ResourcesGridLayout);
+	
 	
 }
 
@@ -227,6 +263,10 @@ void serverconfigurationtab::setupUserGameOptionsScreen(gameOptions& gOArray, in
 string  serverconfigurationtab::getServerConfigSettings(QGroupBox* groupBox)
 {
 	qDebug()<<groupBox->children();
+
+	
+	settingsIni->beginGroup(groupBox->objectName());
+	
 	QListIterator<QObject *> i(groupBox->children());
 	stringstream settings;
 	while (i.hasNext())
@@ -238,11 +278,13 @@ string  serverconfigurationtab::getServerConfigSettings(QGroupBox* groupBox)
 			{
 				QSpinBox * tempSpinBox =qobject_cast<QSpinBox *>(i.next());
 				settings <<tempSpinBox->objectName().toStdString() << "=" << tempSpinBox->value()<<"\n";
+				settingsIni->setValue(tempSpinBox->objectName(),tempSpinBox->value());
 			}
 			else if (i.peekNext()->inherits("QLineEdit"))
 			{
 				QLineEdit* tempLineEdit=qobject_cast<QLineEdit *>(i.next());
 				settings << tempLineEdit->objectName().toStdString() << "=" << tempLineEdit->text().toStdString() <<"\n";
+				settingsIni->setValue(tempLineEdit->objectName(),tempLineEdit->text());
 			}
 			else if (i.peekNext()->inherits("QCheckBox"))
 			{
@@ -251,11 +293,15 @@ string  serverconfigurationtab::getServerConfigSettings(QGroupBox* groupBox)
 				{
 					settings << tempCheckBox->objectName().toStdString() << "=" <<((tempCheckBox->isChecked()) ? ("true") : ("false") ) <<"\n";
 				}
+				settingsIni->setValue(tempCheckBox->objectName(),((tempCheckBox->isChecked()) ? ("true") : ("false") ));
+
 			}
 			else if (i.peekNext()->inherits("QComboBox"))
 			{
 				QComboBox* tempComboBox=qobject_cast<QComboBox *>(i.next());
 				settings << tempComboBox->objectName().toStdString() << "=" << tempComboBox->itemData(tempComboBox->currentIndex(),Qt::DisplayRole).toString().toStdString() <<"\n";
+				//settingsIni->setValue(tempComboBox->objectName(),tempComboBox->itemData(tempComboBox->currentIndex(),Qt::DisplayRole).toString());
+				settingsIni->setValue(tempComboBox->objectName(),tempComboBox->currentIndex());
 			}
 
 		}
@@ -264,12 +310,74 @@ string  serverconfigurationtab::getServerConfigSettings(QGroupBox* groupBox)
 			i.next(); //advance the iterator but don't do anything with the item because it's a label
 		}
 	}
+	
+	settingsIni->endGroup();
 	return settings.str();
+}
+
+void  serverconfigurationtab::setServerConfigSettings(QGroupBox* groupBox)
+{
+	qDebug()<<groupBox->children();
+
+	
+	settingsIni->beginGroup(groupBox->objectName());
+	
+	QListIterator<QObject *> i(groupBox->children());
+	//stringstream settings;
+	while (i.hasNext())
+	{
+
+		if (!(i.peekNext()->inherits("QLabel") || i.peekNext()->inherits("QPushButton") || i.peekNext()->inherits("QGridLayout")))
+		{
+			if (i.peekNext()->inherits("QSpinBox"))
+			{
+				QSpinBox * tempSpinBox =qobject_cast<QSpinBox *>(i.next());
+				tempSpinBox->setValue(this->settingsIni->value(tempSpinBox->objectName()).toInt());
+				//settings <<tempSpinBox->objectName().toStdString() << "=" << tempSpinBox->value()<<"\n";
+				//settingsIni->setValue(tempSpinBox->objectName(),tempSpinBox->value());
+			}
+			else if (i.peekNext()->inherits("QLineEdit"))
+			{
+				QLineEdit* tempLineEdit=qobject_cast<QLineEdit *>(i.next());
+				qDebug() << "setting: " << tempLineEdit->objectName() << "to " << this->settingsIni->value(tempLineEdit->objectName()).toString();
+				tempLineEdit->setText(this->settingsIni->value(tempLineEdit->objectName()).toString());
+				
+			}
+			else if (i.peekNext()->inherits("QCheckBox"))
+			{
+				QCheckBox* tempCheckBox=qobject_cast<QCheckBox *>(i.next());
+				if ("is_master"!=tempCheckBox->objectName().toStdString())
+				{
+					tempCheckBox->setChecked(this->settingsIni->value(tempCheckBox->objectName()).toBool());
+					//settings << tempCheckBox->objectName().toStdString() << "=" <<((tempCheckBox->isChecked()) ? ("true") : ("false") ) <<"\n";
+				}
+				qDebug() << "setting: " << tempCheckBox->objectName() << "to " << this->settingsIni->value(tempCheckBox->objectName()).toBool();
+				tempCheckBox->setChecked(this->settingsIni->value(tempCheckBox->objectName()).toBool());
+				//settingsIni->setValue(tempCheckBox->objectName(),((tempCheckBox->isChecked()) ? ("true") : ("false") ));
+				
+			}
+			else if (i.peekNext()->inherits("QComboBox"))
+			{
+				QComboBox* tempComboBox=qobject_cast<QComboBox *>(i.next());
+				tempComboBox->setCurrentIndex(this->settingsIni->value(tempComboBox->objectName()).toInt());
+				/*settings << tempComboBox->objectName().toStdString() << "=" << tempComboBox->itemData(tempComboBox->currentIndex(),Qt::DisplayRole).toString().toStdString() <<"\n";
+				settingsIni->setValue(tempComboBox->objectName(),tempComboBox->itemData(tempComboBox->currentIndex(),Qt::DisplayRole).toString());*/
+			}
+
+		}
+		else
+		{
+			i.next(); //advance the iterator but don't do anything with the item because it's a label
+		}
+	}
+	
+	settingsIni->endGroup();
 }
 
 string serverconfigurationtab::getGameOptionSettings(QGridLayout* gridLayout)
 {
 	//qDebug()<<gridLayout->count();
+	settingsIni->beginGroup(gridLayout->objectName());
 	stringstream settings;
 	if ("FoodGridLayout"==gridLayout->objectName())
 	{
@@ -302,6 +410,8 @@ string serverconfigurationtab::getGameOptionSettings(QGridLayout* gridLayout)
 		  {
 			QComboBox* tempComboBox=qobject_cast<QComboBox*>(widget);
 			settings << tempComboBox->objectName().toStdString() << "=" << '"'<< handleWorldData(tempComboBox->objectName().toStdString(),tempComboBox->itemData(tempComboBox->currentIndex(),Qt::DisplayRole).toString().toStdString()) <<'"'<<",\n\t\t\t";
+			//settingsIni->setValue(tempComboBox->objectName(),tempComboBox->itemData(tempComboBox->currentIndex(),Qt::DisplayRole));
+			settingsIni->setValue(tempComboBox->objectName(),tempComboBox->currentIndex());
 		  }
 	 
 		}
@@ -315,13 +425,51 @@ string serverconfigurationtab::getGameOptionSettings(QGridLayout* gridLayout)
 		  {
 			QComboBox* tempComboBox=qobject_cast<QComboBox*>(widget);
 			settings << tempComboBox->objectName().toStdString() << "=" << '"'<< convertComboData(tempComboBox->itemData(tempComboBox->currentIndex(),Qt::DisplayRole).toString().toStdString()) <<'"'<<",\n\t\t\t";
+			//settingsIni->setValue(tempComboBox->objectName(),tempComboBox->itemData(tempComboBox->currentIndex(),Qt::DisplayRole));
+			settingsIni->setValue(tempComboBox->objectName(),tempComboBox->currentIndex());
 		  }
 	 
 		}
 	}
+	settingsIni->endGroup();
 	settings <<"},\n";
 	return settings.str();
 }
+
+void serverconfigurationtab::setGameOptionSettings(QGridLayout* gridLayout)
+{
+	//qDebug()<<gridLayout->count();
+	settingsIni->beginGroup(gridLayout->objectName());
+	
+	if ("gridLayout"==gridLayout->objectName())
+	{
+		for (int i = 0; i < gridLayout->count(); ++i)
+		{
+		  QWidget *widget = gridLayout->itemAt(i)->widget();
+		  if ((widget != NULL) && (widget->inherits("QComboBox")))
+		  {
+			QComboBox* tempComboBox=qobject_cast<QComboBox*>(widget);
+			tempComboBox->setCurrentIndex(this->settingsIni->value(tempComboBox->objectName()).toInt());
+		  }
+	 
+		}
+	}
+	else
+	{
+		for (int i = 0; i < gridLayout->count(); ++i)
+		{
+		  QWidget *widget = gridLayout->itemAt(i)->widget();
+		  if ((widget != NULL) && (widget->inherits("QComboBox")))
+		  {
+			QComboBox* tempComboBox=qobject_cast<QComboBox*>(widget);
+			tempComboBox->setCurrentIndex(this->settingsIni->value(tempComboBox->objectName()).toInt());
+		  }
+	 
+		}
+	}
+	settingsIni->endGroup();
+}
+
 
 string serverconfigurationtab::convertComboData(string pickedItem)
 {
@@ -430,34 +578,51 @@ void serverconfigurationtab::saveSettings()
 {
 	//save all settings to the cluster.ini, server.ini and worldoverridesettings.lua
 	QString serverDirectoryPathFinal=setupFolders();
-	qDebug() << serverDirectoryPath;
+	qDebug() << "Saving to the following directory: " << serverDirectoryPath;
+
+	QString filePathName=serverDirectoryPathFinal+QString(QDir::separator())+ui.name->text()+".dstman";
+	ofstream myfile;
+	
 
 	
-	QString filePathName=serverDirectoryPath+QString(QDir::separator())+"cluster.ini";
-	ofstream myfile;
-		myfile.open (filePathName.toStdString());
-		myfile << "[GAMEPLAY]\n";
-		myfile << getServerConfigSettings(ui.gameplaySettings) << "\n\n";
-		myfile << "[NETWORK]\n";
-		myfile << getServerConfigSettings(ui.networkSettings) << "\n\n";
-		myfile << "[MISC]\n";
-		myfile << getServerConfigSettings(ui.miscSettings) << "\n\n";
-		myfile << "[SHARD]\n";
-		myfile << getServerConfigSettings(ui.shardSettings) << "\n\n";
-		myfile.close();
+	filePathName=serverDirectoryPath+QString(QDir::separator())+"cluster.ini";
+	myfile.open (filePathName.toStdString());
+	myfile << "[GAMEPLAY]\n";
+	myfile << getServerConfigSettings(ui.gameplaySettings) << "\n\n";
+	myfile << "[NETWORK]\n";
+	myfile << getServerConfigSettings(ui.networkSettings) << "\n\n";
+	myfile << "[MISC]\n";
+	myfile << getServerConfigSettings(ui.miscSettings) << "\n\n";
+	myfile << "[SHARD]\n";
+	myfile << getServerConfigSettings(ui.shardSettings) << "\n\n";
+	myfile.close();
 	
 
 	filePathName=serverDirectoryPathFinal+QString(QDir::separator())+"server.ini";
 	myfile.open (filePathName.toStdString());
 	myfile << "[SHARD]\n";
 	myfile << ui.is_master->objectName().toStdString() << "=" <<((ui.is_master->isChecked()) ? ("true") : ("false") ) <<"\n";
+	settingsIni->setValue(ui.is_master->objectName(),((ui.is_master->isChecked()) ? ("true") : ("false") ));
 	myfile << ui.name->objectName().toStdString() << "=" << ui.name->text().toStdString() <<"\n";
+	settingsIni->setValue(ui.name->objectName(),ui.name->text());
 	myfile << ui.id->objectName().toStdString() << "=" << ui.id->text().toStdString() <<"\n";
+	settingsIni->setValue(ui.id->objectName(),ui.id->text());
 	myfile << "[STEAM]\n";
+	settingsIni->beginGroup(ui.steamSettings->objectName());
+	settingsIni->setValue(ui.steam_group_id->objectName(),ui.steam_group_id->text());
+	settingsIni->setValue(ui.steam_group_only->objectName(),((ui.steam_group_only->isChecked()) ? ("true") : ("false") ));
+	settingsIni->setValue(ui.steam_group_admins->objectName(),((ui.steam_group_admins->isChecked()) ? ("true") : ("false") ));
+	settingsIni->setValue(ui.authentication_port->objectName(),ui.authentication_port->value());
+	settingsIni->setValue(ui.master_server_port->objectName(),ui.master_server_port->value());
+	settingsIni->endGroup();
 	myfile << ui.authentication_port->objectName().toStdString() << "=" << ui.authentication_port->value()<<"\n";
+	
 	myfile << ui.master_server_port->objectName().toStdString() << "=" << ui.master_server_port->value()<<"\n";
+	
+	
 	myfile << "[NETWORK]\n";
 	myfile << ui.server_port->objectName().toStdString() << "=" << ui.server_port->value()<<"\n";
+	settingsIni->setValue(ui.server_port->objectName(),ui.server_port->value());
 	myfile.close();
 
 
@@ -473,7 +638,6 @@ void serverconfigurationtab::saveSettings()
 	myfile << "}";
 	myfile.close();
 
-	
 }
 
 void serverconfigurationtab::run()
