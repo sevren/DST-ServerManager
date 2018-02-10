@@ -1,0 +1,154 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>dstmanagersettings</class>
+ <widget class="QWidget" name="dstmanagersettings">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>400</width>
+    <height>198</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>dstmanagersettings</string>
+  </property>
+  <widget class="QLabel" name="defaultServerLabel">
+   <property name="geometry">
+    <rect>
+     <x>10</x>
+     <y>30</y>
+     <width>111</width>
+     <height>16</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>Default Server Folder:</string>
+   </property>
+  </widget>
+  <widget class="QLabel" name="steamCMDPathLabel">
+   <property name="geometry">
+    <rect>
+     <x>10</x>
+     <y>80</y>
+     <width>111</width>
+     <height>16</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>Path to SteamCMD:</string>
+   </property>
+  </widget>
+  <widget class="QLabel" name="serverTokenLabel">
+   <property name="geometry">
+    <rect>
+     <x>10</x>
+     <y>130</y>
+     <width>91</width>
+     <height>16</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>ServerToken:</string>
+   </property>
+  </widget>
+  <widget class="QLineEdit" name="defaultServerFolder">
+   <property name="geometry">
+    <rect>
+     <x>130</x>
+     <y>30</y>
+     <width>251</width>
+     <height>20</height>
+    </rect>
+   </property>
+   <property name="placeholderText">
+    <string>Select a default folder to save server files ...</string>
+   </property>
+  </widget>
+  <widget class="QLineEdit" name="steamCMDPath">
+   <property name="geometry">
+    <rect>
+     <x>130</x>
+     <y>80</y>
+     <width>251</width>
+     <height>20</height>
+    </rect>
+   </property>
+   <property name="placeholderText">
+    <string>Select the path to the steam CMD program ...</string>
+   </property>
+  </widget>
+  <widget class="QLineEdit" name="serverToken">
+   <property name="geometry">
+    <rect>
+     <x>130</x>
+     <y>130</y>
+     <width>251</width>
+     <height>20</height>
+    </rect>
+   </property>
+   <property name="placeholderText">
+    <string>Paste the Server Token from Don't Starve Console</string>
+   </property>
+  </widget>
+  <widget class="QPushButton" name="saveBtn">
+   <property name="geometry">
+    <rect>
+     <x>310</x>
+     <y>160</y>
+     <width>75</width>
+     <height>23</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>Save &amp;&amp; Close</string>
+   </property>
+  </widget>
+  <widget class="QPushButton" name="defaultServerFolderBtn">
+   <property name="geometry">
+    <rect>
+     <x>214</x>
+     <y>50</y>
+     <width>161</width>
+     <height>23</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>Select Default ServerFolder...</string>
+   </property>
+  </widget>
+  <widget class="QPushButton" name="steamCMDPathBtn">
+   <property name="geometry">
+    <rect>
+     <x>214</x>
+     <y>100</y>
+     <width>161</width>
+     <height>23</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>Select Path to SteamCMD...</string>
+   </property>
+  </widget>
+ </widget>
+ <layoutdefault spacing="6" margin="11"/>
+ <resources/>
+ <connections>
+  <connection>
+   <sender>saveBtn</sender>
+   <signal>clicked()</signal>
+   <receiver>dstmanagersettings</receiver>
+   <slot>close()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>347</x>
+     <y>171</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>199</x>
+     <y>98</y>
+    </hint>
+   </hints>
+  </connection>
+ </connections>
+</ui>

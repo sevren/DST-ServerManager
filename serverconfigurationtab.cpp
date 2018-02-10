@@ -1,6 +1,7 @@
 #include <tuple>
 #include <string>
 #include "serverconfigurationtab.h"
+#include "worldsettings.h"
 #include <qimage.h>
 #include <QDebug>
 #include <boost/foreach.hpp>
@@ -28,6 +29,8 @@ serverconfigurationtab::serverconfigurationtab(QString preset,QString serverDire
 {
 
 	ui.setupUi(this);
+
+	
 	this->serverDirectoryPath=serverDirectoryPath;
 	this->linked=linked;
 	this->preset=preset;
@@ -64,18 +67,20 @@ serverconfigurationtab::serverconfigurationtab(QString preset,QString serverDire
 	//Fill the appropriate gameOption arrays depending on the preset choosen
 	if ("Forest"==preset)
 	{
+		
 		ForestWorldArray=fillGameOptions(WorldArray,avatars);
 		ForestResourcesArray=fillGameOptions(ResourcesArray,avatars);
 		ForestFoodArray=fillGameOptions(FoodArray,avatars);
 		ForestAnimalsArray=fillGameOptions(AnimalsArray,avatars);
 		ForestMonstersArray=fillGameOptions(MonstersArray,avatars);
+		ui.serverDefn->addTab(new worldsettings(ForestWorldArray, ForestResourcesArray, ForestFoodArray,  ForestAnimalsArray, ForestMonstersArray), "Forest Options");
 
 		//
-		setupUserGameOptionsScreen(ForestWorldArray,_WORLD_);
+		/*setupUserGameOptionsScreen(ForestWorldArray,_WORLD_);
 		setupUserGameOptionsScreen(ForestResourcesArray,_RESOURCES_);
 		setupUserGameOptionsScreen(ForestFoodArray,_FOOD_);
 		setupUserGameOptionsScreen(ForestAnimalsArray,_ANIMALS_);
-		setupUserGameOptionsScreen(ForestMonstersArray,_MONSTERS_);
+		setupUserGameOptionsScreen(ForestMonstersArray,_MONSTERS_);*/
 	}
 	else if ("Cave"==preset)
 	{
@@ -84,14 +89,36 @@ serverconfigurationtab::serverconfigurationtab(QString preset,QString serverDire
 		CaveFoodArray=fillGameOptions(FoodArray,avatars);
 		CaveAnimalsArray=fillGameOptions(AnimalsArray,avatars);
 		CaveMonstersArray=fillGameOptions(MonstersArray,avatars);
+		ui.serverDefn->addTab(new worldsettings(CaveWorldArray, CaveResourcesArray, CaveFoodArray, CaveAnimalsArray, CaveMonstersArray), "Cave Options");
 
-		setupUserGameOptionsScreen(CaveWorldArray,_WORLD_);
+		/*setupUserGameOptionsScreen(CaveWorldArray,_WORLD_);
 		setupUserGameOptionsScreen(CaveResourcesArray,_RESOURCES_);
 		setupUserGameOptionsScreen(CaveFoodArray,_FOOD_);
 		setupUserGameOptionsScreen(CaveAnimalsArray,_ANIMALS_);
-		setupUserGameOptionsScreen(CaveMonstersArray,_MONSTERS_);
+		setupUserGameOptionsScreen(CaveMonstersArray,_MONSTERS_);*/
 
 
+
+	}
+	else if ("Both" == preset)
+	{
+
+		
+		ForestWorldArray = fillGameOptions(WorldArray, avatars);
+		ForestResourcesArray = fillGameOptions(ResourcesArray, avatars);
+		ForestFoodArray = fillGameOptions(FoodArray, avatars);
+		ForestAnimalsArray = fillGameOptions(AnimalsArray, avatars);
+		ForestMonstersArray = fillGameOptions(MonstersArray, avatars);
+
+		ui.serverDefn->addTab(new worldsettings(ForestWorldArray, ForestResourcesArray, ForestFoodArray, ForestAnimalsArray, ForestMonstersArray), "Forest Options");
+
+		
+		CaveWorldArray = fillGameOptions(WorldArray, avatars);
+		CaveResourcesArray = fillGameOptions(ResourcesArray, avatars);
+		CaveFoodArray = fillGameOptions(FoodArray, avatars);
+		CaveAnimalsArray = fillGameOptions(AnimalsArray, avatars);
+		CaveMonstersArray = fillGameOptions(MonstersArray, avatars);
+		ui.serverDefn->addTab(new worldsettings(CaveWorldArray, CaveResourcesArray, CaveFoodArray, CaveAnimalsArray, CaveMonstersArray), "Cave Options");
 
 	}
 	
@@ -114,7 +141,7 @@ serverconfigurationtab::serverconfigurationtab(QString preset,QString serverDire
 		ui.is_master->setChecked(false);
 		ui.cluster_key->setText("41AF3DC");
 		ui.id->setText(QString::number(setRandomPort(0,65535)));
-	//	ui.serverSettings->setVisible(false);
+		
 	}
 
 
@@ -145,11 +172,11 @@ serverconfigurationtab::serverconfigurationtab(QString fileToOpen,QImage*avatars
 	setServerConfigSettings(x->ui.shardSettings);
 	setServerConfigSettings(x->ui.steamSettings);
 
-	setGameOptionSettings(x->ui.FoodGridLayout);
+	/*setGameOptionSettings(x->ui.FoodGridLayout);
 	setGameOptionSettings(x->ui.gridLayout);
 	setGameOptionSettings(x->ui.AnimalsGridLayout);
 	setGameOptionSettings(x->ui.MonstersGridLayout);
-	setGameOptionSettings(x->ui.ResourcesGridLayout);
+	setGameOptionSettings(x->ui.ResourcesGridLayout);*/
 	
 	
 }
@@ -216,10 +243,15 @@ gameOptions serverconfigurationtab::fillGameOptions(xmlDataValues& dataValues, Q
 void serverconfigurationtab::setupUserGameOptionsScreen(gameOptions& gOArray, int dataType)
 {
 	QGridLayout* gLayout;
-	switch(dataType)
+
+	qDebug() << ui.serverDefn->widget(1)->children().at(0)->children().at(0)->children().at(0)->children();
+
+	//TODO MOVE THE FOLLOWING CODE TO THE world settings instance so we can populate that screen from that class instead of here..
+
+	/*switch(dataType)
 	{
 		case _WORLD_:
-			gLayout=std::ref(ui.gridLayout);
+			gLayout=std::ref();
 		break;
 		case _RESOURCES_:
 			gLayout=std::ref(ui.ResourcesGridLayout);
@@ -257,7 +289,7 @@ void serverconfigurationtab::setupUserGameOptionsScreen(gameOptions& gOArray, in
 					indx++;
 				}
 		}		
-	}
+	}*/
 }
 
 string  serverconfigurationtab::getServerConfigSettings(QGroupBox* groupBox)
@@ -374,7 +406,7 @@ void  serverconfigurationtab::setServerConfigSettings(QGroupBox* groupBox)
 	settingsIni->endGroup();
 }
 
-string serverconfigurationtab::getGameOptionSettings(QGridLayout* gridLayout)
+/*string serverconfigurationtab::getGameOptionSettings(QGridLayout* gridLayout)
 {
 	//qDebug()<<gridLayout->count();
 	settingsIni->beginGroup(gridLayout->objectName());
@@ -542,7 +574,7 @@ string serverconfigurationtab::handleWorldData(string name,string pickedItem)
 		return iter->second.c_str();
 	}
 	
-}
+}*/
 
 
 QString serverconfigurationtab::setupFolders()
@@ -630,11 +662,11 @@ void serverconfigurationtab::saveSettings()
 	myfile.open (filePathName.toStdString());
 	myfile << "return {\n \t\t override_enabled = true, \n";
 	//myfile << fetchPreset();
-	myfile << getGameOptionSettings(ui.FoodGridLayout) << "\n";
+	/*myfile << getGameOptionSettings(ui.FoodGridLayout) << "\n";
 	myfile << getGameOptionSettings(ui.gridLayout) << "\n";
 	myfile << getGameOptionSettings(ui.AnimalsGridLayout) << "\n";
 	myfile << getGameOptionSettings(ui.MonstersGridLayout) << "\n";
-	myfile << getGameOptionSettings(ui.ResourcesGridLayout) << "\n";
+	myfile << getGameOptionSettings(ui.ResourcesGridLayout) << "\n";*/
 	myfile << "}";
 	myfile.close();
 

@@ -4,6 +4,7 @@
 #include <QtWidgets/QMainWindow>
 #include "ui_dstservermanager.h"
 #include "serverconfigurationtab.h"
+#include "worldsettings.h"
 
 using namespace std;
 
@@ -25,6 +26,7 @@ public:
 
 public slots:
 	void getData(QString,QString,QString);
+	void getDstServerManagerSettingsData(QString, QString, QString);
 
 private:
 	Ui::dstServerManagerClass ui;

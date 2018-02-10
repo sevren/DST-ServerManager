@@ -9,6 +9,7 @@
 #define _MONSTERS_ 4
 
 #include <QWidget>
+#include <qgridlayout.h>
 #include <boost/bimap.hpp>
 #include "ui_serverconfigurationtab.h"
 #include "qsettings.h"

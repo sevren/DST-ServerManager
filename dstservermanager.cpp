@@ -3,6 +3,7 @@
 #include <tuple>
 #include "dstservermanager.h"
 #include "newdialog.h"
+#include "dstmanagersettings.h"
 #include <QDebug>
 #include <qfiledialog.h>
 #include "pugixml.cpp"
@@ -130,6 +131,7 @@ void dstServerManager::setupConnections()
 {
 	connect(ui.actionNew,SIGNAL(triggered()),this,SLOT(createNewServerConfig()));
 	connect(ui.actionOpen,SIGNAL(triggered()),this,SLOT(openDialog()));
+	connect(ui.actionServerManagerSettings, SIGNAL(triggered()), this, SLOT(settingsDialog()));
 }
 
 
@@ -140,6 +142,7 @@ void dstServerManager::createNewServerConfig()
 	newd->show();
 }
 
+
 void dstServerManager::getData(QString serverTabName, QString preset, QString serverDirectoryPath)
 {
 	qDebug() << serverTabName;
@@ -148,6 +151,7 @@ void dstServerManager::getData(QString serverTabName, QString preset, QString se
 	if ("Forest"==preset)
 	{
 		tabWidget->addTab(new serverconfigurationtab(preset,serverDirectoryPath,avatars,ForestWorldArray,ForestResourcesArray,ForestFoodArray,ForestAnimalsArray,ForestMonstersArray,false),serverTabName);
+		
 	
 	}
 	else if ("Cave"==preset)
@@ -157,8 +161,9 @@ void dstServerManager::getData(QString serverTabName, QString preset, QString se
 	}
 	else if ("Both"==preset)
 	{
-		tabWidget->addTab(new serverconfigurationtab("Forest",serverDirectoryPath,avatars,ForestWorldArray,ForestResourcesArray,ForestFoodArray,ForestAnimalsArray,ForestMonstersArray,true),serverTabName+"_forest");
-		tabWidget->addTab(new serverconfigurationtab("Cave",serverDirectoryPath,avatars,CaveWorldArray,CaveResourcesArray,CaveFoodArray,CaveAnimalsArray,CaveMonstersArray,true),serverTabName+"_cave");
+		//TODO pass in both Forest and Cave arrays when doing both presets
+		tabWidget->addTab(new serverconfigurationtab("Both",serverDirectoryPath,avatars,ForestWorldArray,ForestResourcesArray,ForestFoodArray,ForestAnimalsArray,ForestMonstersArray,true),serverTabName);
+		//tabWidget->addTab(new serverconfigurationtab("Cave",serverDirectoryPath,avatars,CaveWorldArray,CaveResourcesArray,CaveFoodArray,CaveAnimalsArray,CaveMonstersArray,true),serverTabName+"_cave");
 	
 	}
 }
@@ -176,7 +181,9 @@ void dstServerManager::openDialog()
 
 void dstServerManager::settingsDialog()
 {
-	//show the settings dialog
+	dstmanagersettings *dstServerMangerSettings = new dstmanagersettings(dstWindow);
+	//connect(dstServerMangerSettings, SIGNAL(sendData(QString, QString, QString)), this, SLOT(getDstServerManagerSettingsData(QString, QString, QString)));
+	dstServerMangerSettings->show();
 }
 
 void dstServerManager::aboutDialog()
@@ -237,4 +244,8 @@ bool dstServerManager::serverExists(QString tabName)
 dstServerManager::~dstServerManager()
 {
 
+}
+
+void dstServerManager::getDstServerManagerSettingsData(QString, QString, QString)
+{
 }
