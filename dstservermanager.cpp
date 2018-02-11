@@ -148,6 +148,10 @@ void dstServerManager::getData(QString serverTabName, QString preset, QString se
 	qDebug() << serverTabName;
 	qDebug() << preset;
 	qDebug() << serverDirectoryPath;
+	QDir dir(serverDirectoryPath);
+	if (!dir.exists()) {
+		dir.mkpath(dir.absolutePath());
+	}
 	if ("Forest"==preset)
 	{
 		tabWidget->addTab(new serverconfigurationtab(preset,serverDirectoryPath,avatars,ForestWorldArray,ForestResourcesArray,ForestFoodArray,ForestAnimalsArray,ForestMonstersArray,false),serverTabName);

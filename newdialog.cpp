@@ -79,7 +79,7 @@ void NewDialog::createNewServerConfig()
 		{
 			ServerPresetType = QString("Both");
 		}
-		ServerDirectoryPath=getTextFromInputBox(ui.serverFilePath);
+		ServerDirectoryPath=getTextFromInputBox(ui.serverFilePath) + QString(QDir::separator()) + ServerConfigName;
 		emit sendData(ServerConfigName,ServerPresetType,ServerDirectoryPath);
 		this->~NewDialog();
 	}
