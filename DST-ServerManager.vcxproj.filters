@@ -59,9 +59,6 @@
     <ClCompile Include="serverconfigurationtab.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="testdlg.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="GeneratedFiles\Debug\moc_worldsettings.cpp">
       <Filter>Generated Files</Filter>
     </ClCompile>
@@ -89,9 +86,6 @@
       <Filter>Header Files</Filter>
     </CustomBuild>
     <CustomBuild Include="serverconfigurationtab.h">
-      <Filter>Header Files</Filter>
-    </CustomBuild>
-    <CustomBuild Include="testdlg.h">
       <Filter>Header Files</Filter>
     </CustomBuild>
     <CustomBuild Include="worldsettings.h">
@@ -132,12 +126,6 @@
     <ClCompile Include="GeneratedFiles\release\moc_serverconfigurationtab.cpp">
       <Filter>Generated Files</Filter>
     </ClCompile>
-    <ClCompile Include="GeneratedFiles\debug\moc_testdlg.cpp">
-      <Filter>Generated Files</Filter>
-    </ClCompile>
-    <ClCompile Include="GeneratedFiles\release\moc_testdlg.cpp">
-      <Filter>Generated Files</Filter>
-    </ClCompile>
     <ClCompile Include="GeneratedFiles\qrc_dstservermanager.cpp">
       <Filter>Generated Files</Filter>
     </ClCompile>
@@ -150,9 +138,6 @@
     <ClInclude Include="GeneratedFiles\ui_serverconfigurationtab.h">
       <Filter>Generated Files</Filter>
     </ClInclude>
-    <ClInclude Include="GeneratedFiles\ui_testdlg.h">
-      <Filter>Generated Files</Filter>
-    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <CustomBuild Include="dstservermanager.ui">
@@ -162,9 +147,6 @@
       <Filter>Form Files</Filter>
     </CustomBuild>
     <CustomBuild Include="serverconfigurationtab.ui">
-      <Filter>Form Files</Filter>
-    </CustomBuild>
-    <CustomBuild Include="testdlg.ui">
       <Filter>Form Files</Filter>
     </CustomBuild>
   </ItemGroup>

@@ -154,7 +154,6 @@
     <ClCompile Include="main.cpp" />
     <ClCompile Include="newdialog.cpp" />
     <ClCompile Include="serverconfigurationtab.cpp" />
-    <ClCompile Include="testdlg.cpp" />
     <ClCompile Include="worldsettings.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -187,16 +186,6 @@
       <Command Condition="'$(Configuration)|$(Platform)'=='Release|x64'">"$(QTDIR)\bin\moc.exe"  "%(FullPath)" -o ".\GeneratedFiles\$(ConfigurationName)\moc_%(Filename).cpp"  -D_WINDOWS -DUNICODE -D_UNICODE -DWIN32 -DWIN64 -DQT_DLL -DQT_WIDGETS_LIB -DQT_XML_LIB -DQT_XMLPATTERNS_LIB -DQT_NO_DEBUG -DQT_GUI_LIB -DQT_NETWORK_LIB -DQT_CORE_LIB -DNDEBUG  "-I." "-I.\..\Includes\PugiXml" "-I.\GeneratedFiles" "-I.\GeneratedFiles\Debug" "-I$(QTDIR)\include" "-I$(QTDIR)\include\QtWidgets" "-I$(QTDIR)\include\QtGui" "-I$(QTDIR)\include\QtANGLE" "-I$(QTDIR)\include\QtXml" "-I$(QTDIR)\include\QtXmlPatterns" "-I$(QTDIR)\include\QtNetwork" "-I$(QTDIR)\include\QtCore" "-I.\GeneratedFiles\release" "-I\include" "-I$(QTDIR)\mkspecs\win32-msvc" "-I.\GeneratedFiles"</Command>
       <Message Condition="'$(Configuration)|$(Platform)'=='Release|x64'">MOC serverconfigurationtab.h</Message>
       <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">GeneratedFiles\release\moc_serverconfigurationtab.cpp;%(Outputs)</Outputs>
-    </CustomBuild>
-    <CustomBuild Include="testdlg.h">
-      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">testdlg.h;GeneratedFiles\debug\moc_predefs.h;$(QTDIR)\bin\moc.exe;%(AdditionalInputs)</AdditionalInputs>
-      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">"$(QTDIR)\bin\moc.exe"  "%(FullPath)" -o ".\GeneratedFiles\$(ConfigurationName)\moc_%(Filename).cpp"  -D_WINDOWS -DUNICODE -D_UNICODE -DWIN32 -DWIN64 -DQT_DLL -DQT_WIDGETS_LIB -DQT_XML_LIB -DQT_XMLPATTERNS_LIB -DQT_GUI_LIB -DQT_NETWORK_LIB -DQT_CORE_LIB  "-IE:\DevTools\boost_1_66_0\boost_1_66_0" "-I.\Includes\PugiXml" "-I.\GeneratedFiles" "-I.\GeneratedFiles\Debug" "-I$(QTDIR)\include" "-I$(QTDIR)\include\QtWidgets" "-I$(QTDIR)\include\QtGui" "-I$(QTDIR)\include\QtANGLE" "-I$(QTDIR)\include\QtXml" "-I$(QTDIR)\include\QtXmlPatterns" "-I$(QTDIR)\include\QtNetwork" "-I$(QTDIR)\include\QtCore" "-I.\GeneratedFiles\debug" "-I\include" "-I$(QTDIR)\mkspecs\win32-msvc" "-I." "-I.\GeneratedFiles"</Command>
-      <Message Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">MOC testdlg.h</Message>
-      <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">GeneratedFiles\debug\moc_testdlg.cpp;%(Outputs)</Outputs>
-      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">testdlg.h;GeneratedFiles\release\moc_predefs.h;$(QTDIR)\bin\moc.exe;%(AdditionalInputs)</AdditionalInputs>
-      <Command Condition="'$(Configuration)|$(Platform)'=='Release|x64'">"$(QTDIR)\bin\moc.exe"  "%(FullPath)" -o ".\GeneratedFiles\$(ConfigurationName)\moc_%(Filename).cpp"  -D_WINDOWS -DUNICODE -D_UNICODE -DWIN32 -DWIN64 -DQT_DLL -DQT_WIDGETS_LIB -DQT_XML_LIB -DQT_XMLPATTERNS_LIB -DQT_NO_DEBUG -DQT_GUI_LIB -DQT_NETWORK_LIB -DQT_CORE_LIB -DNDEBUG  "-I." "-I.\..\Includes\PugiXml" "-I.\GeneratedFiles" "-I.\GeneratedFiles\Debug" "-I$(QTDIR)\include" "-I$(QTDIR)\include\QtWidgets" "-I$(QTDIR)\include\QtGui" "-I$(QTDIR)\include\QtANGLE" "-I$(QTDIR)\include\QtXml" "-I$(QTDIR)\include\QtXmlPatterns" "-I$(QTDIR)\include\QtNetwork" "-I$(QTDIR)\include\QtCore" "-I.\GeneratedFiles\release" "-I\include" "-I$(QTDIR)\mkspecs\win32-msvc" "-I.\GeneratedFiles"</Command>
-      <Message Condition="'$(Configuration)|$(Platform)'=='Release|x64'">MOC testdlg.h</Message>
-      <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">GeneratedFiles\release\moc_testdlg.cpp;%(Outputs)</Outputs>
     </CustomBuild>
   </ItemGroup>
   <ItemGroup>
@@ -270,17 +259,10 @@
     <ClCompile Include="GeneratedFiles\release\moc_serverconfigurationtab.cpp">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
     </ClCompile>
-    <ClCompile Include="GeneratedFiles\debug\moc_testdlg.cpp">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
-    </ClCompile>
-    <ClCompile Include="GeneratedFiles\release\moc_testdlg.cpp">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
-    </ClCompile>
     <ClCompile Include="GeneratedFiles\qrc_dstservermanager.cpp" />
     <ClInclude Include="GeneratedFiles\ui_dstservermanager.h" />
     <ClInclude Include="GeneratedFiles\ui_newdialog.h" />
     <ClInclude Include="GeneratedFiles\ui_serverconfigurationtab.h" />
-    <ClInclude Include="GeneratedFiles\ui_testdlg.h" />
   </ItemGroup>
   <ItemGroup>
     <CustomBuild Include="dstservermanager.ui">
@@ -315,17 +297,6 @@
       <Command Condition="'$(Configuration)|$(Platform)'=='Release|x64'">$(QTDIR)\bin\uic.exe serverconfigurationtab.ui -o GeneratedFiles\ui_serverconfigurationtab.h</Command>
       <Message Condition="'$(Configuration)|$(Platform)'=='Release|x64'">UIC serverconfigurationtab.ui</Message>
       <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">GeneratedFiles\ui_serverconfigurationtab.h;%(Outputs)</Outputs>
-    </CustomBuild>
-    <CustomBuild Include="testdlg.ui">
-      <FileType>Document</FileType>
-      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">testdlg.ui;$(QTDIR)\bin\uic.exe;%(AdditionalInputs)</AdditionalInputs>
-      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">$(QTDIR)\bin\uic.exe testdlg.ui -o GeneratedFiles\ui_testdlg.h</Command>
-      <Message Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">UIC testdlg.ui</Message>
-      <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">GeneratedFiles\ui_testdlg.h;%(Outputs)</Outputs>
-      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">testdlg.ui;$(QTDIR)\bin\uic.exe;%(AdditionalInputs)</AdditionalInputs>
-      <Command Condition="'$(Configuration)|$(Platform)'=='Release|x64'">$(QTDIR)\bin\uic.exe testdlg.ui -o GeneratedFiles\ui_testdlg.h</Command>
-      <Message Condition="'$(Configuration)|$(Platform)'=='Release|x64'">UIC testdlg.ui</Message>
-      <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">GeneratedFiles\ui_testdlg.h;%(Outputs)</Outputs>
     </CustomBuild>
   </ItemGroup>
   <ItemGroup>
