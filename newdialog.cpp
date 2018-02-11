@@ -4,6 +4,15 @@
 #include "dstservermanager.h"
 #include <qfiledialog.h>
 
+/*
+* NewDialog - This is the form for creating a new server configuration
+* User writes a server name, specifies a location to keep the files (if default folder is not desired)
+* and chooses a preset.
+* Clicking Save will invoke the validation function
+*/
+
+//TODO: Use the default server files location from dstmanagersettings when opening the filechooser
+
 NewDialog::NewDialog(dstServerManager *dstWindow,QWidget *parent)
 	: QWidget(parent)
 {
@@ -64,12 +73,11 @@ void NewDialog::createNewServerConfig()
 	{
 		qDebug() << "emit create New Server Config";
 		ServerConfigName=getTextFromInputBox(ui.NewServerConfigName);
-		//Forest must be emitted as a QString from the radio buttons
+		
 		if (ui.preset_forest->isChecked())
 		{
 
 			ServerPresetType = QString("Forest");
-			//emit sendData(getTextFromInputBox(ui.NewServerConfigName),QString("Forest"));
 		}
 		else if (ui.preset_cave->isChecked())
 		{

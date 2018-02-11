@@ -3,6 +3,14 @@
 using namespace std;
 using namespace boost;
 
+/*
+* WorldSettings - This deals with the resource settings for each preset
+* Takes in the appropriate arrays, augments the tab with the avatars and possible values for the correct resource
+*/
+
+
+//TODO: Allow data from the comboboxes to be read from the serverconfigurationtab
+//TODO: Remove the debugging statements
 worldsettings::worldsettings(QWidget *parent)
 	: QWidget(parent)
 {

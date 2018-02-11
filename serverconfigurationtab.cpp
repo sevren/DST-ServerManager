@@ -21,8 +21,21 @@
 using namespace std;
 using namespace boost;
 
+/*
+* ServerConfigurationTab - This deals with the tab holding all the server configuration data.
+* Creates the tabs for the world settings based on the preset selected during the creation or the 
+* preset that was read when the server configuration file was opened.
+*
+* Requires a map file to be read in so we can convert values displayed in the user interface to the ones required in the server configuration lua. Since it is not 1:1 
+*
+* Creates a server configuration INI file when a new serverconfiguration tab is created, this file tells dstservermanager what kind of preset is used when opening the server configuation
+* Responsible for writing the relevant files out to disk when clicking the save button.
+*/
 
-
+//TODO: Change the name of the server configuration file from testing.ini to something better
+//TODO: Migrate some of the code dealing with the resource settings to the worldsettings class
+//TODO: Fix the save function so that it can fetch data from the worldsettings class
+//TODO: Remove unused code
 
 serverconfigurationtab::serverconfigurationtab(QString preset,QString serverDirectoryPath,QImage*avatars, xmlDataValues& WorldArray,xmlDataValues& ResourcesArray,xmlDataValues& FoodArray,xmlDataValues& AnimalsArray,xmlDataValues& MonstersArray,bool linked,QWidget *parent)
 	: QWidget(parent)
@@ -34,7 +47,7 @@ serverconfigurationtab::serverconfigurationtab(QString preset,QString serverDire
 	this->serverDirectoryPath=serverDirectoryPath;
 	this->linked=linked;
 	this->preset=preset;
-	readMaps();
+	readMaps(); //need to know how to convert between the values used in the lua script and human readable values for setting the resources so we prepare a set of maps
 	QString settingsPath=serverDirectoryPath+QString(QDir::separator());
 	
 	//QSettings s(QString(settingsPath+QString("testing")+".ini"),QSettings::IniFormat);
