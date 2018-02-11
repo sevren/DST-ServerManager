@@ -1,8 +1,5 @@
 #include "dstservermanager.h"
 #include <QtWidgets/QApplication>
-#include "testdlg.h"
-
-
 
 int main(int argc, char *argv[])
 {
