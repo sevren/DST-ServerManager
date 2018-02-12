@@ -42,8 +42,8 @@ Important files:
 
 * Run DSTServerManager.exe
 * Complete the first time setup by selecting a path to SteamCMD, Update te deafult path of the server configuration files if desired, add in the server token obtained from the don't starve together console
-** Select File -> New to start creating a new server configuration
-** Select File -> Open and navigate to the ini file for the server configuration you wish to open
+  * Select File -> New to start creating a new server configuration
+  * Select File -> Open and navigate to the ini file for the server configuration you wish to open
 
 Make your edits to your configuration and click save to write them disk. Save will output shortcuts to launch your dedicated server
 
