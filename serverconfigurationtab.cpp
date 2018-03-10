@@ -30,11 +30,14 @@ using namespace boost;
 *
 * Creates a server configuration INI file when a new serverconfiguration tab is created, this file tells dstservermanager what kind of preset is used when opening the server configuation
 * Responsible for writing the relevant files out to disk when clicking the save button.
+* A shorcut for starting the server with the correct config path should be created once save is clicked.
 */
 
 //TODO: Change the name of the server configuration file from testing.ini to something better
 //TODO: Migrate some of the code dealing with the resource settings to the worldsettings class
 //TODO: Fix the save function so that it can fetch data from the worldsettings class
+//TODO: Create a intelligent object to hold multiple resource arrays for preset and maps and pass that in to the constructor instead of multiple arrays.
+//TODO: Create a class responsible soley for writing out the data to a file for the server + gameoptions
 //TODO: Remove unused code
 
 serverconfigurationtab::serverconfigurationtab(QString preset,QString serverDirectoryPath,QImage*avatars, xmlDataValues& WorldArray,xmlDataValues& ResourcesArray,xmlDataValues& FoodArray,xmlDataValues& AnimalsArray,xmlDataValues& MonstersArray,bool linked,QWidget *parent)
@@ -54,29 +57,7 @@ serverconfigurationtab::serverconfigurationtab(QString preset,QString serverDire
 	this->settingsIni=new QSettings(QString(settingsPath+QString("testing")+".ini"),QSettings::IniFormat);
 	this->settingsIni->setValue("preset",preset);
 	this->settingsIni->setValue("linked",linked);
-	qDebug() << "The number of items in season_start is " << seasonstart_map.size();
 	
-	for( gameOptionsMapping::const_iterator iter = seasonstart_map.begin(), iend = seasonstart_map.end(); iter != iend; ++iter )
-	{
-		// iter->left  : data : std:string
-		// iter->right : data : std::string
-
-		qDebug() << iter->left.c_str() << " <--> " << iter->right.c_str();
-	}
-
-	//use left when going from gui to file && use right when going from file to gui
-	gameOptionsMapping::left_const_iterator iter = seasonstart_map.left.find("Winter/Summer");
-	qDebug() << iter->second.c_str();
-
-
-	/*qDebug() << "Size of  World Array: " <<WorldArray.size();
-	qDebug() << "Size of  Resources Array: " <<ResourcesArray.size();
-	qDebug() << "Size of  Food Array: " <<FoodArray.size();
-	qDebug() << "Size of  Animals Array: " <<AnimalsArray.size();
-	qDebug() << "Size of  Monsters Array: " <<MonstersArray.size();
-	qDebug() << std::get<1>(WorldArray[0]).c_str();
-	qDebug() <<"Testing get";*/
-
 	//Fill the appropriate gameOption arrays depending on the preset choosen
 	if ("Forest"==preset)
 	{
@@ -86,14 +67,10 @@ serverconfigurationtab::serverconfigurationtab(QString preset,QString serverDire
 		ForestFoodArray=fillGameOptions(FoodArray,avatars);
 		ForestAnimalsArray=fillGameOptions(AnimalsArray,avatars);
 		ForestMonstersArray=fillGameOptions(MonstersArray,avatars);
-		ui.serverDefn->addTab(new worldsettings(ForestWorldArray, ForestResourcesArray, ForestFoodArray,  ForestAnimalsArray, ForestMonstersArray), "Forest Options");
+		wforestSettings =new worldsettings(ForestWorldArray, ForestResourcesArray, ForestFoodArray, ForestAnimalsArray, ForestMonstersArray,*settingsIni);
+		ui.serverDefn->addTab(wforestSettings, "Forest Options");
 
-		//
-		/*setupUserGameOptionsScreen(ForestWorldArray,_WORLD_);
-		setupUserGameOptionsScreen(ForestResourcesArray,_RESOURCES_);
-		setupUserGameOptionsScreen(ForestFoodArray,_FOOD_);
-		setupUserGameOptionsScreen(ForestAnimalsArray,_ANIMALS_);
-		setupUserGameOptionsScreen(ForestMonstersArray,_MONSTERS_);*/
+	
 	}
 	else if ("Cave"==preset)
 	{
@@ -102,36 +79,8 @@ serverconfigurationtab::serverconfigurationtab(QString preset,QString serverDire
 		CaveFoodArray=fillGameOptions(FoodArray,avatars);
 		CaveAnimalsArray=fillGameOptions(AnimalsArray,avatars);
 		CaveMonstersArray=fillGameOptions(MonstersArray,avatars);
-		ui.serverDefn->addTab(new worldsettings(CaveWorldArray, CaveResourcesArray, CaveFoodArray, CaveAnimalsArray, CaveMonstersArray), "Cave Options");
-
-		/*setupUserGameOptionsScreen(CaveWorldArray,_WORLD_);
-		setupUserGameOptionsScreen(CaveResourcesArray,_RESOURCES_);
-		setupUserGameOptionsScreen(CaveFoodArray,_FOOD_);
-		setupUserGameOptionsScreen(CaveAnimalsArray,_ANIMALS_);
-		setupUserGameOptionsScreen(CaveMonstersArray,_MONSTERS_);*/
-
-
-
-	}
-	else if ("Both" == preset)
-	{
-
-		
-		ForestWorldArray = fillGameOptions(WorldArray, avatars);
-		ForestResourcesArray = fillGameOptions(ResourcesArray, avatars);
-		ForestFoodArray = fillGameOptions(FoodArray, avatars);
-		ForestAnimalsArray = fillGameOptions(AnimalsArray, avatars);
-		ForestMonstersArray = fillGameOptions(MonstersArray, avatars);
-
-		ui.serverDefn->addTab(new worldsettings(ForestWorldArray, ForestResourcesArray, ForestFoodArray, ForestAnimalsArray, ForestMonstersArray), "Forest Options");
-
-		
-		CaveWorldArray = fillGameOptions(WorldArray, avatars);
-		CaveResourcesArray = fillGameOptions(ResourcesArray, avatars);
-		CaveFoodArray = fillGameOptions(FoodArray, avatars);
-		CaveAnimalsArray = fillGameOptions(AnimalsArray, avatars);
-		CaveMonstersArray = fillGameOptions(MonstersArray, avatars);
-		ui.serverDefn->addTab(new worldsettings(CaveWorldArray, CaveResourcesArray, CaveFoodArray, CaveAnimalsArray, CaveMonstersArray), "Cave Options");
+		wCaveSettings = new worldsettings(CaveWorldArray, CaveResourcesArray, CaveFoodArray, CaveAnimalsArray, CaveMonstersArray, *settingsIni);
+		ui.serverDefn->addTab(wCaveSettings, "Cave Options");
 
 	}
 	
@@ -185,6 +134,25 @@ serverconfigurationtab::serverconfigurationtab(QString fileToOpen,QImage*avatars
 	setServerConfigSettings(x->ui.shardSettings);
 	setServerConfigSettings(x->ui.steamSettings);
 
+	if ("Forest" == preset)
+	{
+		x->wforestSettings->setFoodData();
+		x->wforestSettings->setWorldData();
+		x->wforestSettings->setAnimalData();
+		x->wforestSettings->setMonsterData();
+		x->wforestSettings->setResourceData();
+	}
+	else if ("Cave" == preset)
+	{
+		x->wCaveSettings->setFoodData();
+		x->wCaveSettings->setWorldData();
+		x->wCaveSettings->setAnimalData();
+		x->wCaveSettings->setMonsterData();
+		x->wCaveSettings->setResourceData();
+	
+	}
+
+
 	/*setGameOptionSettings(x->ui.FoodGridLayout);
 	setGameOptionSettings(x->ui.gridLayout);
 	setGameOptionSettings(x->ui.AnimalsGridLayout);
@@ -194,6 +162,85 @@ serverconfigurationtab::serverconfigurationtab(QString fileToOpen,QImage*avatars
 	
 }
 
+serverconfigurationtab::serverconfigurationtab(QString preset, QString serverDirectoryPath, QImage*avatars, xmlDataValues& fWorldArray, xmlDataValues& fResourcesArray, xmlDataValues& fFoodArray, xmlDataValues& fAnimalsArray, xmlDataValues& fMonstersArray, xmlDataValues& cWorldArray, xmlDataValues& cResourcesArray, xmlDataValues& cFoodArray, xmlDataValues& cAnimalsArray, xmlDataValues& cMonstersArray, bool linked, QWidget *parent)
+	: QWidget(parent)
+{
+
+	ui.setupUi(this);
+
+
+	this->serverDirectoryPath = serverDirectoryPath;
+	this->linked = linked;
+	this->preset = preset;
+	readMaps(); //need to know how to convert between the values used in the lua script and human readable values for setting the resources so we prepare a set of maps
+	QString settingsPath = serverDirectoryPath + QString(QDir::separator());
+
+	//QSettings s(QString(settingsPath+QString("testing")+".ini"),QSettings::IniFormat);
+	this->settingsIni = new QSettings(QString(settingsPath + QString("testing") + ".ini"), QSettings::IniFormat);
+	this->settingsIni->setValue("preset", preset);
+	this->settingsIni->setValue("linked", linked);
+	qDebug() << "The number of items in season_start is " << seasonstart_map.size();
+
+	for (gameOptionsMapping::const_iterator iter = seasonstart_map.begin(), iend = seasonstart_map.end(); iter != iend; ++iter)
+	{
+		// iter->left  : data : std:string
+		// iter->right : data : std::string
+
+		qDebug() << iter->left.c_str() << " <--> " << iter->right.c_str();
+	}
+
+	//use left when going from gui to file && use right when going from file to gui
+	gameOptionsMapping::left_const_iterator iter = seasonstart_map.left.find("Winter/Summer");
+	qDebug() << iter->second.c_str();
+
+
+
+	ForestWorldArray = fillGameOptions(fWorldArray, avatars);
+	ForestResourcesArray = fillGameOptions(fResourcesArray, avatars);
+	ForestFoodArray = fillGameOptions(fFoodArray, avatars);
+	ForestAnimalsArray = fillGameOptions(fAnimalsArray, avatars);
+	ForestMonstersArray = fillGameOptions(fMonstersArray, avatars);
+
+	wforestSettings = new worldsettings(ForestWorldArray, ForestResourcesArray, ForestFoodArray, ForestAnimalsArray, ForestMonstersArray, *settingsIni);
+
+	ui.serverDefn->addTab(wforestSettings, "Forest Options");
+
+
+	CaveWorldArray = fillGameOptions(cWorldArray, avatars);
+	CaveResourcesArray = fillGameOptions(cResourcesArray, avatars);
+	CaveFoodArray = fillGameOptions(cFoodArray, avatars);
+	CaveAnimalsArray = fillGameOptions(cAnimalsArray, avatars);
+	CaveMonstersArray = fillGameOptions(cMonstersArray, avatars);
+	wCaveSettings = new worldsettings(CaveWorldArray, CaveResourcesArray, CaveFoodArray, CaveAnimalsArray, CaveMonstersArray, *settingsIni);
+	ui.serverDefn->addTab(wCaveSettings, "Cave Options");
+
+	ui.authentication_port->setValue(setRandomPort(8766, 65535));
+	ui.master_server_port->setValue(setRandomPort(27016, 65535));
+	ui.server_port->setValue(setRandomPort(10999, 11018));
+
+
+	if (linked && "Forest" == preset)
+	{
+		ui.shard_enabled->setChecked(true);
+		ui.is_master->setChecked(true);
+		ui.cluster_key->setText("41AF3DC");
+
+	}
+	else if (linked && "Cave" == preset)
+	{
+		ui.shard_enabled->setChecked(true);
+		ui.is_master->setChecked(false);
+		ui.cluster_key->setText("41AF3DC");
+		ui.id->setText(QString::number(setRandomPort(0, 65535)));
+
+	}
+
+
+
+	connect(ui.saveBtn, SIGNAL(clicked()), this, SLOT(saveSettings()));
+	connect(ui.runBtn, SIGNAL(clicked()), this, SLOT(run()));
+
+}
 
 serverconfigurationtab::~serverconfigurationtab()
 {
@@ -253,57 +300,7 @@ gameOptions serverconfigurationtab::fillGameOptions(xmlDataValues& dataValues, Q
 	return filledGameOptions;
 }
 
-void serverconfigurationtab::setupUserGameOptionsScreen(gameOptions& gOArray, int dataType)
-{
-	QGridLayout* gLayout;
 
-	qDebug() << ui.serverDefn->widget(1)->children().at(0)->children().at(0)->children().at(0)->children();
-
-	//TODO MOVE THE FOLLOWING CODE TO THE world settings instance so we can populate that screen from that class instead of here..
-
-	/*switch(dataType)
-	{
-		case _WORLD_:
-			gLayout=std::ref();
-		break;
-		case _RESOURCES_:
-			gLayout=std::ref(ui.ResourcesGridLayout);
-		break;
-		case _FOOD_:
-			gLayout=std::ref(ui.FoodGridLayout);
-		break;
-		case _ANIMALS_:
-			gLayout=std::ref(ui.AnimalsGridLayout);
-		break;
-		case _MONSTERS_:
-			gLayout=std::ref(ui.MonstersGridLayout);
-		break;
-	}
-
-	int indx=0;
-	int counter=0;
-	for (int gridRow=0;gridRow<gOArray.size();gridRow++)
-	{
-		for(int gridCol=0;gridCol<4;gridCol++)
-		{
-			if (indx>=gOArray.size())
-				{
-					break;
-				}
-			//	qDebug() << gridRow<<","<< gridCol<< "  counter is "<< counter << " index is" << indx;
-				
-
-				gLayout->addWidget(gOArray[indx].first,gridRow,gridCol);
-				gLayout->addWidget(gOArray[indx].second,gridRow,gridCol+1);
-
-				counter++;
-				if(counter % 2==0) //every 2 elements processed move onto next gameOption
-				{
-					indx++;
-				}
-		}		
-	}*/
-}
 
 string  serverconfigurationtab::getServerConfigSettings(QGroupBox* groupBox)
 {
@@ -419,177 +416,7 @@ void  serverconfigurationtab::setServerConfigSettings(QGroupBox* groupBox)
 	settingsIni->endGroup();
 }
 
-/*string serverconfigurationtab::getGameOptionSettings(QGridLayout* gridLayout)
-{
-	//qDebug()<<gridLayout->count();
-	settingsIni->beginGroup(gridLayout->objectName());
-	stringstream settings;
-	if ("FoodGridLayout"==gridLayout->objectName())
-	{
-		settings << "\tunprepared = { -- \"never\", \"rare\", \"default\", \"often\", \"always\"\n\t\t\t";
-	}
-	else if ("gridLayout"==gridLayout->objectName())
-	{
-		settings << "\tmisc = { \n\t\t\t";
-	}
-	else if ("ResourcesGridLayout"==gridLayout->objectName())
-	{
-		settings << "\tresources = { -- \"never\", \"rare\", \"default\", \"often\", \"always\"\n\t\t\t";
-	}
-	else if ("AnimalsGridLayout"==gridLayout->objectName())
-	{
-		settings << "\tanimals = { -- \"never\", \"rare\", \"default\", \"often\", \"always\"\n\t\t\t";
-	}
-	else if ("MonstersGridLayout"==gridLayout->objectName())
-	{
-		settings << "\tmonsters = { -- \"never\", \"rare\", \"default\", \"often\", \"always\"\n\t\t\t";
-	}
-
-
-	if ("gridLayout"==gridLayout->objectName())
-	{
-		for (int i = 0; i < gridLayout->count(); ++i)
-		{
-		  QWidget *widget = gridLayout->itemAt(i)->widget();
-		  if ((widget != NULL) && (widget->inherits("QComboBox")))
-		  {
-			QComboBox* tempComboBox=qobject_cast<QComboBox*>(widget);
-			settings << tempComboBox->objectName().toStdString() << "=" << '"'<< handleWorldData(tempComboBox->objectName().toStdString(),tempComboBox->itemData(tempComboBox->currentIndex(),Qt::DisplayRole).toString().toStdString()) <<'"'<<",\n\t\t\t";
-			//settingsIni->setValue(tempComboBox->objectName(),tempComboBox->itemData(tempComboBox->currentIndex(),Qt::DisplayRole));
-			settingsIni->setValue(tempComboBox->objectName(),tempComboBox->currentIndex());
-		  }
-	 
-		}
-	}
-	else
-	{
-		for (int i = 0; i < gridLayout->count(); ++i)
-		{
-		  QWidget *widget = gridLayout->itemAt(i)->widget();
-		  if ((widget != NULL) && (widget->inherits("QComboBox")))
-		  {
-			QComboBox* tempComboBox=qobject_cast<QComboBox*>(widget);
-			settings << tempComboBox->objectName().toStdString() << "=" << '"'<< convertComboData(tempComboBox->itemData(tempComboBox->currentIndex(),Qt::DisplayRole).toString().toStdString()) <<'"'<<",\n\t\t\t";
-			//settingsIni->setValue(tempComboBox->objectName(),tempComboBox->itemData(tempComboBox->currentIndex(),Qt::DisplayRole));
-			settingsIni->setValue(tempComboBox->objectName(),tempComboBox->currentIndex());
-		  }
-	 
-		}
-	}
-	settingsIni->endGroup();
-	settings <<"},\n";
-	return settings.str();
-}
-
-void serverconfigurationtab::setGameOptionSettings(QGridLayout* gridLayout)
-{
-	//qDebug()<<gridLayout->count();
-	settingsIni->beginGroup(gridLayout->objectName());
-	
-	if ("gridLayout"==gridLayout->objectName())
-	{
-		for (int i = 0; i < gridLayout->count(); ++i)
-		{
-		  QWidget *widget = gridLayout->itemAt(i)->widget();
-		  if ((widget != NULL) && (widget->inherits("QComboBox")))
-		  {
-			QComboBox* tempComboBox=qobject_cast<QComboBox*>(widget);
-			tempComboBox->setCurrentIndex(this->settingsIni->value(tempComboBox->objectName()).toInt());
-		  }
-	 
-		}
-	}
-	else
-	{
-		for (int i = 0; i < gridLayout->count(); ++i)
-		{
-		  QWidget *widget = gridLayout->itemAt(i)->widget();
-		  if ((widget != NULL) && (widget->inherits("QComboBox")))
-		  {
-			QComboBox* tempComboBox=qobject_cast<QComboBox*>(widget);
-			tempComboBox->setCurrentIndex(this->settingsIni->value(tempComboBox->objectName()).toInt());
-		  }
-	 
-		}
-	}
-	settingsIni->endGroup();
-}
-
-
-string serverconfigurationtab::convertComboData(string pickedItem)
-{
-	gameOptionsMapping::left_const_iterator iter = other_map.left.find(pickedItem);
-	return iter->second.c_str();
-}
-
-string serverconfigurationtab::handleWorldData(string name,string pickedItem)
-{
-	if (("autumn"==name) || ("spring"==name) || ("summer"==name)||("winter"==name))
-	{
-		//autumn = "default", -- "noseason", "veryshortseason", "shortseason", "default", "longseason", "verylongseason", "random"
-		gameOptionsMapping::left_const_iterator iter = seasons_map.left.find(pickedItem);
-		return iter->second.c_str();
-	}
-	else if ("branching"==name) //can be converted to lower case with spaces removed
-	{
-		gameOptionsMapping::left_const_iterator iter = branching_map.left.find(pickedItem);
-		return iter->second.c_str();
-
-	}
-	else if ("cavelight"==name) //can be converted to lower case with spaces removed.
-	{
-		gameOptionsMapping::left_const_iterator iter = cavelight_map.left.find(pickedItem);
-		return iter->second.c_str();
-
-	}
-	else if ("day"==name) //can just be trimmed and spaces removed and converted to lower case
-	{
-		//day = "default", -- "default", "longday", "longdusk", "longnight", "noday", "nodusk", "nonight", "onlyday", "onlydusk", "onlynight"
-		gameOptionsMapping::left_const_iterator iter = day_map.left.find(pickedItem);
-		return iter->second.c_str();
-	}
-	else if ("loop"==name) //can just be converted to lower case
-	{
-		gameOptionsMapping::left_const_iterator iter = loop_map.left.find(pickedItem);
-		return iter->second.c_str();
-
-	}
-	else if ("regrowth"==name) //can be converted to lower case and spaces removed.
-	{
-		gameOptionsMapping::left_const_iterator iter = regrowth_map.left.find(pickedItem);
-		return iter->second.c_str();
-	}
-	else if ("season_start"==name)
-	{
-		//season_start = "default", -- "default", "winter", "spring", "summer", "autumnorspring", "winterorsummer", "random"
-		gameOptionsMapping::left_const_iterator iter = seasonstart_map.left.find(pickedItem);
-		return iter->second.c_str();
-	}
-	else if ("start_location"==name)
-	{
-		gameOptionsMapping::left_const_iterator iter = startlocation_map.left.find(pickedItem);
-		return iter->second.c_str();
-	}
-	else if("task_set"==name)//biomes
-	{
-		//task_set = "cave_default", -- "classic", "default", "cave_default"
-		gameOptionsMapping::left_const_iterator iter = taskset_map.left.find(pickedItem);
-		return iter->second.c_str();
-	}
-	else if ("world_size"==name)
-	{
-		gameOptionsMapping::left_const_iterator iter = worldsize_map.left.find(pickedItem);
-		return iter->second.c_str();
-	}
-	else
-	{
-		gameOptionsMapping::left_const_iterator iter = other_map.left.find(pickedItem);
-		return iter->second.c_str();
-	}
-	
-}*/
-
-
+//TODO: pass in list of folders to make and iterate through them
 QString serverconfigurationtab::setupFolders()
 {
 	QString finalDir;
@@ -600,6 +427,17 @@ QString serverconfigurationtab::setupFolders()
 	else if ("Cave"==preset)
 	{
 		finalDir="Cave";
+	}
+	else
+	{
+		QDir dir(serverDirectoryPath + QString(QDir::separator()) + "Master");
+		if (!dir.exists()) {
+			dir.mkpath(".");
+		}
+		dir = QDir(serverDirectoryPath + QString(QDir::separator()) + "Cave");
+		if (!dir.exists()) {
+			dir.mkpath(".");
+		}
 	}
 	
 	QDir dir(serverDirectoryPath+QString(QDir::separator())+finalDir);
@@ -671,10 +509,49 @@ void serverconfigurationtab::saveSettings()
 	myfile.close();
 
 
-	filePathName=serverDirectoryPathFinal+QString(QDir::separator())+"worldgenoverride.lua";
-	myfile.open (filePathName.toStdString());
-	myfile << "return {\n \t\t override_enabled = true, \n";
+	
+
 	//myfile << fetchPreset();
+	if ("Forest" == preset)
+	{
+		filePathName = serverDirectoryPathFinal + QString(QDir::separator())+QString(QDir::separator()) + "Master" + QString(QDir::separator()) + + "worldgenoverride.lua";
+		myfile.open(filePathName.toStdString());
+		myfile << "return {\n \t\t override_enabled = true, \n";
+		myfile << wforestSettings->getFoodData() << "\n";
+		myfile << wforestSettings->getWorldData() << "\n";
+		myfile << wforestSettings->getAnimalData() << "\n";
+		myfile << wforestSettings->getMonstersData() << "\n";
+		myfile << wforestSettings->getResourceData() << "\n";
+	}
+	else if ("Cave" == preset)
+	{
+		filePathName = serverDirectoryPathFinal + QString(QDir::separator())+"Cave"+ QString(QDir::separator()) + "worldgenoverride.lua";
+		myfile.open(filePathName.toStdString());
+		myfile << "return {\n \t\t override_enabled = true, \n";
+		myfile << wCaveSettings->getFoodData() << "\n";
+		myfile << wCaveSettings->getWorldData() << "\n";
+		myfile << wCaveSettings->getAnimalData() << "\n";
+		myfile << wCaveSettings->getMonstersData() << "\n";
+		myfile << wCaveSettings->getResourceData() << "\n";
+	}
+	else
+	{
+	
+		filePathName = serverDirectoryPathFinal + QString(QDir::separator()) + "Cave" + QString(QDir::separator()) + "worldgenoverride.lua";
+		myfile.open(filePathName.toStdString());
+		myfile << wforestSettings->getFoodData() << "\n";
+		myfile << wforestSettings->getWorldData() << "\n";
+		myfile << wforestSettings->getAnimalData() << "\n";
+		myfile << wforestSettings->getMonstersData() << "\n";
+		myfile << wforestSettings->getResourceData() << "\n";
+		myfile.open(filePathName.toStdString());
+		myfile << wCaveSettings->getFoodData() << "\n";
+		myfile << wCaveSettings->getWorldData() << "\n";
+		myfile << wCaveSettings->getAnimalData() << "\n";
+		myfile << wCaveSettings->getMonstersData() << "\n";
+		myfile << wCaveSettings->getResourceData() << "\n";
+
+	}
 	/*myfile << getGameOptionSettings(ui.FoodGridLayout) << "\n";
 	myfile << getGameOptionSettings(ui.gridLayout) << "\n";
 	myfile << getGameOptionSettings(ui.AnimalsGridLayout) << "\n";
@@ -685,6 +562,7 @@ void serverconfigurationtab::saveSettings()
 
 }
 
+//TODO: Run should run the shortcut created from hitting the save button
 void serverconfigurationtab::run()
 {
 	qDebug() << "Trying to run ...";

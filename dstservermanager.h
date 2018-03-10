@@ -63,8 +63,6 @@ private:
 	const char* cavesAnimalsCountsXpath = "count(//Presets/Cave/Animals/*)";
 	const char* cavesMonstersXpath = "count(//Presets/Cave/Monsters/*)";
 
-
-	
 	
 };
 

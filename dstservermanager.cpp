@@ -182,11 +182,18 @@ void dstServerManager::getData(QString serverTabName, QString preset, QString se
 	}
 	else if ("Both"==preset)
 	{
+
 		//TODO pass in both Forest and Cave arrays when doing both presets
-		tabWidget->addTab(new serverconfigurationtab("Both",serverDirectoryPath,avatars,ForestWorldArray,ForestResourcesArray,ForestFoodArray,ForestAnimalsArray,ForestMonstersArray,true),serverTabName);
+		tabWidget->addTab(new serverconfigurationtab(preset, serverDirectoryPath, avatars, ForestWorldArray, ForestResourcesArray, ForestFoodArray, ForestAnimalsArray, ForestMonstersArray, CaveWorldArray, CaveResourcesArray, CaveFoodArray, CaveAnimalsArray, CaveMonstersArray, true),serverTabName);
 		//tabWidget->addTab(new serverconfigurationtab("Cave",serverDirectoryPath,avatars,CaveWorldArray,CaveResourcesArray,CaveFoodArray,CaveAnimalsArray,CaveMonstersArray,true),serverTabName+"_cave");
 	
 	}
+}
+
+//Signal to handle the world data from the worldsettings
+void getWorldData(string)
+{
+	//write the string into the settings ini file.
 }
 
 

@@ -13,6 +13,7 @@
 #include <boost/bimap.hpp>
 #include "ui_serverconfigurationtab.h"
 #include "qsettings.h"
+#include "worldsettings.h"
 
 using namespace std;
 
@@ -28,8 +29,10 @@ class serverconfigurationtab : public QWidget
 
 public:
 	serverconfigurationtab(QString preset,QString serverDirectoryPath, QImage*, xmlDataValues&,xmlDataValues&,xmlDataValues&,xmlDataValues&,xmlDataValues&,bool,QWidget *parent = 0);
+	serverconfigurationtab(QString preset, QString serverDirectoryPath, QImage* avatars, xmlDataValues& ForestWorldArray, xmlDataValues& ForestResourcesArray, xmlDataValues& ForestFoodArray, xmlDataValues& ForestAnimalsArray, xmlDataValues& ForestMonstersArray, xmlDataValues& CavesworldArray, xmlDataValues& caveResourcesArray, xmlDataValues& caveFoodArray, xmlDataValues& caveAnimalsArray, xmlDataValues& caveMonstersArray, bool,QWidget *parent = 0);
 	serverconfigurationtab(QString fileNameToOpen,QImage*, xmlDataValues&,xmlDataValues&,xmlDataValues&,xmlDataValues&,xmlDataValues&,bool,QWidget *parent = 0);
 	~serverconfigurationtab();
+
 
 
 private slots:
@@ -41,7 +44,9 @@ private:
 	QString serverDirectoryPath;
 	bool linked;
 	QString preset;
-	QSettings *settingsIni;
+	QSettings* settingsIni;
+	worldsettings* wforestSettings;
+	worldsettings* wCaveSettings;
 	
 
 	//we need bi directional maps because the value to display value are completely diffrent :(
@@ -77,7 +82,6 @@ private:
 
 	QStringList serverconfigurationtab::setComboBoxValues(string values);
 	gameOptions serverconfigurationtab::fillGameOptions(xmlDataValues&, QImage*);
-	void serverconfigurationtab::setupUserGameOptionsScreen(gameOptions& gOArray, int dataType);
 	string  serverconfigurationtab::getServerConfigSettings(QGroupBox* groupBox);
 	void serverconfigurationtab::setServerConfigSettings(QGroupBox* groupBox);
 	string  serverconfigurationtab::getGameOptionSettings(QGridLayout* gridLayout);
