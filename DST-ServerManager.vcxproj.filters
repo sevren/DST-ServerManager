@@ -171,5 +171,8 @@
     <ClInclude Include="GeneratedFiles\ui_dstmanagersettings.h">
       <Filter>Generated Files</Filter>
     </ClInclude>
+    <ClInclude Include="dstman_customdatatypes.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

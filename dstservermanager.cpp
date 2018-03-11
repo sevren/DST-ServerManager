@@ -33,6 +33,22 @@ dstServerManager::dstServerManager(QWidget *parent)
 {
 	ui.setupUi(this);
 	dstWindow=this;
+
+	dstManSettings = new GlobalDSTManSettings();
+
+
+
+	if (dstManSettingsExist())
+	{
+		loadSettings();
+	}
+	else
+	{
+		settingsDialog();
+	}
+	setupConnections();
+
+	setupMainLayout();
 	
 	QImage image(imgPath);
 	QImage copy;
@@ -50,8 +66,7 @@ dstServerManager::dstServerManager(QWidget *parent)
 	}
 	
 
-	setupConnections();
-	setupMainLayout();
+	
 	
 	pugi::xml_document doc;
 	if (!doc.load_file(worldSettingsXmlPath))
@@ -149,12 +164,13 @@ void dstServerManager::setupConnections()
 	connect(ui.actionNew,SIGNAL(triggered()),this,SLOT(createNewServerConfig()));
 	connect(ui.actionOpen,SIGNAL(triggered()),this,SLOT(openDialog()));
 	connect(ui.actionServerManagerSettings, SIGNAL(triggered()), this, SLOT(settingsDialog()));
+	
 }
 
 
 void dstServerManager::createNewServerConfig()
 {
-	NewDialog *newd= new NewDialog(dstWindow);
+	NewDialog *newd= new NewDialog(dstWindow,dstManSettings);
 	connect(newd,SIGNAL(sendData(QString,QString,QString)),this,SLOT(getData(QString,QString,QString)));
 	newd->show();
 }
@@ -212,7 +228,7 @@ void dstServerManager::openDialog()
 void dstServerManager::settingsDialog()
 {
 	dstmanagersettings *dstServerMangerSettings = new dstmanagersettings(dstWindow);
-	//connect(dstServerMangerSettings, SIGNAL(sendData(QString, QString, QString)), this, SLOT(getDstServerManagerSettingsData(QString, QString, QString)));
+	connect(dstServerMangerSettings, SIGNAL(updateDstManSettings(GlobalDSTManSettings*)), this, SLOT(getDstServerManagerSettingsData(GlobalDSTManSettings*)));
 	dstServerMangerSettings->show();
 }
 
@@ -257,6 +273,11 @@ std::vector<std::tuple<int,string,string,string>> dstServerManager::fillGameOpti
 	return filledArray;
 }
 
+bool dstServerManager::dstManSettingsExist()
+{
+	return QFile::exists(QString::fromStdString(dstManagerSettingsFile));
+}
+
 bool dstServerManager::serverExists(QString tabName)
 {
 	qDebug() << "looking for " << tabName << "in the current Tabs";
@@ -277,6 +298,27 @@ dstServerManager::~dstServerManager()
 
 }
 
-void dstServerManager::getDstServerManagerSettingsData(QString, QString, QString)
+void dstServerManager::getDstServerManagerSettingsData(GlobalDSTManSettings* dst)
 {
+	qDebug() << "Caught the emitted Manager settings";
+	this->dstManSettings = dst;
+}
+
+void dstServerManager::loadSettings()
+{
+	QSettings settings(this->dstManagerSettingsFile, QSettings::IniFormat);
+
+	settings.beginGroup("DstManSettings");
+	dstManSettings->defaultServerFilePath = settings.value("defaultServerFilePath").toString().toStdString();
+	dstManSettings->steamCMDExecutablePath = settings.value("steamCMDExecutablePath").toString().toStdString();
+	dstManSettings->clusterTokenValue = settings.value("clusterTokenValue").toString().toStdString();
+	settings.endGroup();
+
+	emit updateDstManSettings(this->dstManSettings);
+}
+
+void updateDstManSettings(GlobalDSTManSettings* dst)
+{
+	
+	
 }

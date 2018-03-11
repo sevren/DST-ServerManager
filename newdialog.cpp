@@ -11,17 +11,20 @@
 * Clicking Save will invoke the validation function
 */
 
-//TODO: Use the default server files location from dstmanagersettings when opening the filechooser
 
-NewDialog::NewDialog(dstServerManager *dstWindow,QWidget *parent)
+NewDialog::NewDialog(dstServerManager *dstWindow,GlobalDSTManSettings *dstManSettings,QWidget *parent)
 	: QWidget(parent)
 {
 	ui.setupUi(this);
+	this->dstManSettings = dstManSettings;
+	qDebug() << dstWindow->metaObject()->className();
+	this->dstWindow = dstWindow;
+	this->dstManSettings = dstManSettings;
 	ui.serverFilePath->setReadOnly(true);
+	ui.serverFilePath->setText(QString::fromStdString(dstManSettings->defaultServerFilePath));
 	connect(ui.buttonBox,SIGNAL(accepted()),this,SLOT(createNewServerConfig()));
 	connect(ui.directoryChooserBtn,SIGNAL(clicked()),this,SLOT(openFileChooser()));
-	qDebug() << dstWindow->metaObject()->className();
-	this->dstWindow=dstWindow;
+	
 }
 
 NewDialog::~NewDialog()
@@ -122,7 +125,7 @@ void NewDialog::createNewServerConfig()
 void NewDialog::openFileChooser()
 {
 	QString dir =QFileDialog::getExistingDirectory(this, tr("Open Directory"),
-                                                "/home",
+                                                QString::fromStdString(this->dstManSettings->defaultServerFilePath),
                                                 QFileDialog::ShowDirsOnly
                                                 | QFileDialog::DontResolveSymlinks);
 	qDebug() <<"Selected Directory is:"<< dir;

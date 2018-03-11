@@ -13,3 +13,5 @@ struct GlobalDSTManSettings
 	std::string clusterTokenValue;
 
 };
+
+enum SettingsBtnType { serverFilePath, steamCMDPath};

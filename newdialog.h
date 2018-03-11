@@ -4,6 +4,7 @@
 #include <QWidget>
 #include "ui_newdialog.h"
 #include "dstservermanager.h"
+#include "dstman_customdatatypes.h"
 
 class NewDialog : public QWidget
 {
@@ -15,7 +16,7 @@ private slots:
 
 
 public:
-	NewDialog(dstServerManager *dstWindow, QWidget *parent = 0);
+	NewDialog(dstServerManager *dstWindow, GlobalDSTManSettings *dstManSettings , QWidget *parent = 0);
 	~NewDialog();
 
 signals:
@@ -26,6 +27,7 @@ private:
 	dstServerManager *dstWindow;
 	QString getTextFromInputBox(QLineEdit*);
 	pair<bool,QString> validate();
+	GlobalDSTManSettings *dstManSettings;
 };
 
 #endif // NEWDIALOG_H

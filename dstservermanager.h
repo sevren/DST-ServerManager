@@ -5,6 +5,7 @@
 #include "ui_dstservermanager.h"
 #include "serverconfigurationtab.h"
 #include "worldsettings.h"
+#include "dstman_customdatatypes.h"
 
 using namespace std;
 
@@ -26,10 +27,15 @@ public:
 
 public slots:
 	void getData(QString,QString,QString);
-	void getDstServerManagerSettingsData(QString, QString, QString);
+	void getDstServerManagerSettingsData(GlobalDSTManSettings*);
+
+signals:
+	void updateDstManSettings(GlobalDSTManSettings*);
 
 private:
+		
 	Ui::dstServerManagerClass ui;
+	GlobalDSTManSettings* dstManSettings;
 	QTabWidget *tabWidget;
 	dstServerManager* dstWindow;
 	std::vector<std::tuple<int,string,string,string>> ForestWorldArray;
@@ -62,6 +68,13 @@ private:
 	const char* cavesFoodCountsXpath = "count(//Presets/Cave/Food/*)";
 	const char* cavesAnimalsCountsXpath = "count(//Presets/Cave/Animals/*)";
 	const char* cavesMonstersXpath = "count(//Presets/Cave/Monsters/*)";
+
+	const char* dstManagerSettingsFile = "dstmansettings.ini";
+
+
+	bool dstManSettingsExist();
+
+	void loadSettings();
 
 	
 };
