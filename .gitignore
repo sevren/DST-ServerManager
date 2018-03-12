@@ -256,3 +256,5 @@ Makefile*
 # QtCtreator CMake
 CMakeLists.txt.user
 *.opendb
+
+dstmansettings.ini

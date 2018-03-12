@@ -508,13 +508,16 @@ void serverconfigurationtab::saveSettings()
 	settingsIni->setValue(ui.server_port->objectName(),ui.server_port->value());
 	myfile.close();
 
-
+	filePathName = serverDirectoryPathFinal + QString(QDir::separator()) + "clustertoken.ini";
+	myfile.open(filePathName.toStdString());
+	myfile << "SERVER TOKEN GOES HERE" << "\n";
+	myfile.close();
 	
 
 	//myfile << fetchPreset();
 	if ("Forest" == preset)
 	{
-		filePathName = serverDirectoryPathFinal + QString(QDir::separator())+QString(QDir::separator()) + "Master" + QString(QDir::separator()) + + "worldgenoverride.lua";
+		filePathName = serverDirectoryPathFinal + QString(QDir::separator())+ "worldgenoverride.lua";
 		myfile.open(filePathName.toStdString());
 		myfile << "return {\n \t\t override_enabled = true, \n";
 		myfile << wforestSettings->getFoodData() << "\n";
@@ -525,7 +528,7 @@ void serverconfigurationtab::saveSettings()
 	}
 	else if ("Cave" == preset)
 	{
-		filePathName = serverDirectoryPathFinal + QString(QDir::separator())+"Cave"+ QString(QDir::separator()) + "worldgenoverride.lua";
+		filePathName = serverDirectoryPathFinal + QString(QDir::separator()) + "worldgenoverride.lua";
 		myfile.open(filePathName.toStdString());
 		myfile << "return {\n \t\t override_enabled = true, \n";
 		myfile << wCaveSettings->getFoodData() << "\n";
@@ -537,28 +540,29 @@ void serverconfigurationtab::saveSettings()
 	else
 	{
 	
-		filePathName = serverDirectoryPathFinal + QString(QDir::separator()) + "Cave" + QString(QDir::separator()) + "worldgenoverride.lua";
+		filePathName = serverDirectoryPathFinal + QString(QDir::separator()) + "Master" + QString(QDir::separator()) + "worldgenoverride.lua";
 		myfile.open(filePathName.toStdString());
 		myfile << wforestSettings->getFoodData() << "\n";
 		myfile << wforestSettings->getWorldData() << "\n";
 		myfile << wforestSettings->getAnimalData() << "\n";
 		myfile << wforestSettings->getMonstersData() << "\n";
 		myfile << wforestSettings->getResourceData() << "\n";
+		myfile << "}";
+		myfile.close();
+		filePathName = serverDirectoryPathFinal + QString(QDir::separator()) + "Cave" + QString(QDir::separator())  + "worldgenoverride.lua";
 		myfile.open(filePathName.toStdString());
 		myfile << wCaveSettings->getFoodData() << "\n";
 		myfile << wCaveSettings->getWorldData() << "\n";
 		myfile << wCaveSettings->getAnimalData() << "\n";
 		myfile << wCaveSettings->getMonstersData() << "\n";
 		myfile << wCaveSettings->getResourceData() << "\n";
+		myfile << "}";
+		myfile.close();
 
 	}
-	/*myfile << getGameOptionSettings(ui.FoodGridLayout) << "\n";
-	myfile << getGameOptionSettings(ui.gridLayout) << "\n";
-	myfile << getGameOptionSettings(ui.AnimalsGridLayout) << "\n";
-	myfile << getGameOptionSettings(ui.MonstersGridLayout) << "\n";
-	myfile << getGameOptionSettings(ui.ResourcesGridLayout) << "\n";*/
-	myfile << "}";
-	myfile.close();
+	
+	//create shortcut based on preset
+	
 
 }
 
