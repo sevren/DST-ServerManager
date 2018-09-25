@@ -1,0 +1,77 @@
+--seasons_map
+None=noseason
+Very short=veryshortseason
+Short=shortseason
+Default=default
+Long=longseason
+Very long=verylongseason
+Random=random
+
+--branching_map
+Never=never
+Least=least
+Default=default
+Most=most
+
+--cavelight_map
+Very Slow=veryslow
+Slow=slow
+Default=default
+Fast=fast
+Very Fast=veryfast
+
+--day_map
+Default=default
+Long Day=longday
+Long Dusk=longdusk
+Long Night=longnight
+No Day=noday
+No Dusk=nodusk
+Only Day=onlyday
+Only Dusk=onlydusk
+Only Night=onlynight
+
+--loop_map
+Never=never
+Default=default
+Always=always
+
+--regrowth_map
+Very Slow=veryslow
+Slow=slow
+Default=default
+Fast=fast
+Very Fast=veryfast
+
+--seasonstart_map
+Autumn=default
+Winter=winter
+Spring=spring
+Summer=summer
+Autumn/Spring=autumnorspring
+Winter/Summer=winterorsummer
+Random=random
+
+--startlocation_map
+Caves=caves
+Default=default
+Plus=plus
+Dark=darkness
+
+--taskset_map
+Classic=classic
+Together=default
+Underground=cave_default
+
+--worldsize_map
+Small=small
+Medium=medium
+Large=default
+Huge=huge
+
+--other_map
+None=never
+Less=rare
+Default=default
+More=often
+Lots=always

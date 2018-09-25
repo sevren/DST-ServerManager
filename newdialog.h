@@ -3,6 +3,8 @@
 
 #include <QWidget>
 #include "ui_newdialog.h"
+#include "dstservermanager.h"
+#include "dstman_customdatatypes.h"
 
 class NewDialog : public QWidget
 {
@@ -10,18 +12,22 @@ class NewDialog : public QWidget
 
 private slots:
 	void createNewServerConfig();
+	void openFileChooser();
 
 
 public:
-	NewDialog(QWidget *parent = 0);
+	NewDialog(dstServerManager *dstWindow, GlobalDSTManSettings *dstManSettings , QWidget *parent = 0);
 	~NewDialog();
+
 signals:
-	void sendData(QString);
+	void sendData(QString,QString,QString);
 
 private:
 	Ui::NewDialog ui;
-	QString getTextFromInputBox();
-	bool validate();
+	dstServerManager *dstWindow;
+	QString getTextFromInputBox(QLineEdit*);
+	pair<bool,QString> validate();
+	GlobalDSTManSettings *dstManSettings;
 };
 
 #endif // NEWDIALOG_H

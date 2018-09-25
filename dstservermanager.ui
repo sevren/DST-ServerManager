@@ -91,6 +91,7 @@
     <property name="title">
      <string>Settings</string>
     </property>
+    <addaction name="actionServerManagerSettings"/>
    </widget>
    <widget class="QMenu" name="menuHelp">
     <property name="title">
@@ -126,6 +127,11 @@
   <action name="actionAbout">
    <property name="text">
     <string>About</string>
+   </property>
+  </action>
+  <action name="actionServerManagerSettings">
+   <property name="text">
+    <string>ServerManagerSettings</string>
    </property>
   </action>
  </widget>
