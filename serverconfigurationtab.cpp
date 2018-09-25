@@ -1,6 +1,7 @@
 #include <tuple>
 #include <string>
 #include "serverconfigurationtab.h"
+#include "dstman_customdatatypes.h"
 #include "worldsettings.h"
 #include <qimage.h>
 #include <QDebug>
@@ -106,13 +107,118 @@ serverconfigurationtab::serverconfigurationtab(QString preset,QString serverDire
 		
 	}
 
-
-
 	connect(ui.saveBtn,SIGNAL(clicked()),this,SLOT(saveSettings()));
 	connect(ui.runBtn,SIGNAL(clicked()),this,SLOT(run()));
 	
 }
-serverconfigurationtab::serverconfigurationtab(QString fileToOpen,QImage*avatars, xmlDataValues& WorldArray,xmlDataValues& ResourcesArray,xmlDataValues& FoodArray,xmlDataValues& AnimalsArray,xmlDataValues& MonstersArray,bool linked,QWidget *parent)
+
+
+serverconfigurationtab::serverconfigurationtab(QString preset, QString serverDirectoryPath, QImage*avatars, UserSettings* userSettings, bool linked, QWidget *parent)
+	: QWidget(parent)
+{
+
+	ui.setupUi(this);
+	this->userSettings = userSettings;
+
+	this->serverDirectoryPath = serverDirectoryPath;
+	this->linked = linked;
+	this->preset = preset;
+	readMaps(); //need to know how to convert between the values used in the lua script and human readable values for setting the resources so we prepare a set of maps
+	QString settingsPath = serverDirectoryPath + QString(QDir::separator());
+
+	//QSettings s(QString(settingsPath+QString("testing")+".ini"),QSettings::IniFormat);
+	this->settingsIni = new QSettings(QString(settingsPath + QString("testing") + ".ini"), QSettings::IniFormat);
+	this->settingsIni->setValue("preset", preset);
+	this->settingsIni->setValue("linked", linked);
+
+	//Fill the appropriate gameOption arrays depending on the preset choosen
+	if ("Forest" == preset)
+	{
+		/*for (std::vector<xmlDataValues>::iterator it = this->userSettings->worldArrays.begin(); it != this->userSettings->worldArrays.end(); ++it)
+		{
+			std::cout << ' ' << *it;
+			std::cout << '\n';
+		}*/
+		
+		ForestWorldArray = fillGameOptions(this->userSettings->worldArrays.at(0), avatars);
+		ForestResourcesArray = fillGameOptions(this->userSettings->worldArrays.at(1), avatars);
+		ForestFoodArray = fillGameOptions(this->userSettings->worldArrays.at(2), avatars);
+		ForestAnimalsArray = fillGameOptions(this->userSettings->worldArrays.at(3), avatars);
+		ForestMonstersArray = fillGameOptions(this->userSettings->worldArrays.at(4), avatars);
+
+		wforestSettings = new worldsettings(ForestWorldArray, ForestResourcesArray, ForestFoodArray, ForestAnimalsArray, ForestMonstersArray, *settingsIni);
+		ui.serverDefn->addTab(wforestSettings, "Forest Options");
+
+
+	}
+	else if ("Cave" == preset)
+	{
+		CaveWorldArray = fillGameOptions(this->userSettings->worldArrays.at(0), avatars);
+		CaveResourcesArray = fillGameOptions(this->userSettings->worldArrays.at(1), avatars);
+		CaveFoodArray = fillGameOptions(this->userSettings->worldArrays.at(2), avatars);
+		CaveAnimalsArray = fillGameOptions(this->userSettings->worldArrays.at(3), avatars);
+		CaveMonstersArray = fillGameOptions(this->userSettings->worldArrays.at(4), avatars);
+		wCaveSettings = new worldsettings(CaveWorldArray, CaveResourcesArray, CaveFoodArray, CaveAnimalsArray, CaveMonstersArray, *settingsIni);
+		ui.serverDefn->addTab(wCaveSettings, "Cave Options");
+
+	}
+	else if ("Both" == preset) 
+	{
+
+
+		ForestWorldArray = fillGameOptions(this->userSettings->worldArrays.at(0), avatars);
+		ForestResourcesArray = fillGameOptions(this->userSettings->worldArrays.at(1), avatars);
+		ForestFoodArray = fillGameOptions(this->userSettings->worldArrays.at(2), avatars);
+		ForestAnimalsArray = fillGameOptions(this->userSettings->worldArrays.at(3), avatars);
+		ForestMonstersArray = fillGameOptions(this->userSettings->worldArrays.at(4), avatars);
+
+		wforestSettings = new worldsettings(ForestWorldArray, ForestResourcesArray, ForestFoodArray, ForestAnimalsArray, ForestMonstersArray, *settingsIni);
+
+		ui.serverDefn->addTab(wforestSettings, "Forest Options");
+
+
+		CaveWorldArray = fillGameOptions(this->userSettings->worldArrays.at(5), avatars);
+		CaveResourcesArray = fillGameOptions(this->userSettings->worldArrays.at(6), avatars);
+		CaveFoodArray = fillGameOptions(this->userSettings->worldArrays.at(7), avatars);
+		CaveAnimalsArray = fillGameOptions(this->userSettings->worldArrays.at(8), avatars);
+		CaveMonstersArray = fillGameOptions(this->userSettings->worldArrays.at(9), avatars);
+		wCaveSettings = new worldsettings(CaveWorldArray, CaveResourcesArray, CaveFoodArray, CaveAnimalsArray, CaveMonstersArray, *settingsIni);
+		ui.serverDefn->addTab(wCaveSettings, "Cave Options");
+
+		ui.shard_enabled->setChecked(true);
+		ui.is_master->setChecked(true);
+		ui.cluster_key->setText("41AF3DC");
+
+	}
+
+
+	ui.authentication_port->setValue(setRandomPort(8766, 65535));
+	ui.master_server_port->setValue(setRandomPort(27016, 65535));
+	ui.server_port->setValue(setRandomPort(10999, 11018));
+
+
+	if (linked && "Forest" == preset)
+	{
+		ui.shard_enabled->setChecked(true);
+		ui.is_master->setChecked(true);
+		ui.cluster_key->setText("41AF3DC");
+
+	}
+	else if (linked && "Cave" == preset)
+	{
+		ui.shard_enabled->setChecked(true);
+		ui.is_master->setChecked(false);
+		ui.cluster_key->setText("41AF3DC");
+		ui.id->setText(QString::number(setRandomPort(0, 65535)));
+
+	}
+
+	connect(ui.saveBtn, SIGNAL(clicked()), this, SLOT(saveSettings()));
+	connect(ui.runBtn, SIGNAL(clicked()), this, SLOT(run()));
+
+}
+
+serverconfigurationtab::serverconfigurationtab(QString fileToOpen,QImage*avatars, UserSettings* userSettings,bool linked,QWidget *parent)
 	: QWidget(parent)
 {
 
@@ -127,7 +233,8 @@ serverconfigurationtab::serverconfigurationtab(QString fileToOpen,QImage*avatars
 	qDebug() << "islinked" << linked;
 
 
-	serverconfigurationtab* x=new serverconfigurationtab(preset,serverDirectoryPath,avatars,WorldArray,ResourcesArray,FoodArray,AnimalsArray,MonstersArray,linked,this);
+	//serverconfigurationtab* x=new serverconfigurationtab(preset,serverDirectoryPath,avatars,WorldArray,ResourcesArray,FoodArray,AnimalsArray,MonstersArray,linked,this);
+	serverconfigurationtab* x = new serverconfigurationtab(preset, serverDirectoryPath, avatars, userSettings, linked, this);
 	setServerConfigSettings(x->ui.gameplaySettings);
 	setServerConfigSettings(x->ui.networkSettings);
 	setServerConfigSettings(x->ui.miscSettings);
@@ -466,8 +573,6 @@ void serverconfigurationtab::saveSettings()
 	QString filePathName=serverDirectoryPathFinal+QString(QDir::separator())+ui.name->text()+".dstman";
 	ofstream myfile;
 	
-
-	
 	filePathName=serverDirectoryPath+QString(QDir::separator())+"cluster.ini";
 	myfile.open (filePathName.toStdString());
 	myfile << "[GAMEPLAY]\n";
@@ -480,7 +585,6 @@ void serverconfigurationtab::saveSettings()
 	myfile << getServerConfigSettings(ui.shardSettings) << "\n\n";
 	myfile.close();
 	
-
 	filePathName=serverDirectoryPathFinal+QString(QDir::separator())+"server.ini";
 	myfile.open (filePathName.toStdString());
 	myfile << "[SHARD]\n";
@@ -508,9 +612,10 @@ void serverconfigurationtab::saveSettings()
 	settingsIni->setValue(ui.server_port->objectName(),ui.server_port->value());
 	myfile.close();
 
+
 	filePathName = serverDirectoryPathFinal + QString(QDir::separator()) + "clustertoken.ini";
 	myfile.open(filePathName.toStdString());
-	myfile << "SERVER TOKEN GOES HERE" << "\n";
+	myfile << this->userSettings->dstManSettings->clusterTokenValue << "\n";
 	myfile.close();
 	
 

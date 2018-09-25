@@ -14,6 +14,7 @@
 #include "ui_serverconfigurationtab.h"
 #include "qsettings.h"
 #include "worldsettings.h"
+#include "dstman_customdatatypes.h"
 
 using namespace std;
 
@@ -29,8 +30,9 @@ class serverconfigurationtab : public QWidget
 
 public:
 	serverconfigurationtab(QString preset,QString serverDirectoryPath, QImage*, xmlDataValues&,xmlDataValues&,xmlDataValues&,xmlDataValues&,xmlDataValues&,bool,QWidget *parent = 0);
+	serverconfigurationtab(QString preset, QString serverDirectoryPath, QImage*, UserSettings*, bool, QWidget *parent = 0);
 	serverconfigurationtab(QString preset, QString serverDirectoryPath, QImage* avatars, xmlDataValues& ForestWorldArray, xmlDataValues& ForestResourcesArray, xmlDataValues& ForestFoodArray, xmlDataValues& ForestAnimalsArray, xmlDataValues& ForestMonstersArray, xmlDataValues& CavesworldArray, xmlDataValues& caveResourcesArray, xmlDataValues& caveFoodArray, xmlDataValues& caveAnimalsArray, xmlDataValues& caveMonstersArray, bool,QWidget *parent = 0);
-	serverconfigurationtab(QString fileNameToOpen,QImage*, xmlDataValues&,xmlDataValues&,xmlDataValues&,xmlDataValues&,xmlDataValues&,bool,QWidget *parent = 0);
+	serverconfigurationtab(QString fileNameToOpen,QImage*, UserSettings*,bool,QWidget *parent = 0);
 	~serverconfigurationtab();
 
 
@@ -47,6 +49,8 @@ private:
 	QSettings* settingsIni;
 	worldsettings* wforestSettings;
 	worldsettings* wCaveSettings;
+
+	UserSettings* userSettings;
 	
 
 	//we need bi directional maps because the value to display value are completely diffrent :(
