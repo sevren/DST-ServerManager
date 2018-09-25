@@ -204,7 +204,6 @@ string worldsettings::getGameOptionSettings(QGridLayout* gridLayout)
 		}
 	}
 	settingsIni->endGroup();
-	settings << "},\n";
 	return settings.str();
 }
 
